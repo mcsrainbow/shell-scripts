@@ -49,13 +49,13 @@ function format_numbers(){
 }
 
 MY_BALLS_MD5SUM=`md5sum my_balls.txt | awk '{print $1}'`
-FORMATED_NUMBERS_MD5SUM=`md5sum formated_numbers.txt | awk '{print $1}'`
 TIMES=1
 while true
 do
   get_all_red_balls
   get_blue_ball
   format_numbers
+  FORMATED_NUMBERS_MD5SUM=`md5sum formated_numbers.txt | awk '{print $1}'`
   if [ $MY_BALLS_MD5SUM == $FORMATED_NUMBERS_MD5SUM ]; then
     echo "You finally get 500W RMB after you buy this $TIMES times!"
     exit
