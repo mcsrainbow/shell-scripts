@@ -1,5 +1,20 @@
 #!/bin/sh
 
+# Let's see how lucky you are
+# 
+# The rule is same as a lottery in China:
+# The red balls is between in 1 to 33
+# The blue ball is between in 1 to 16
+# A ticket has 6 red balls and 1 blue ball
+# If you predict them all you can get 500W RMB
+# 
+# Just write down your balls in my_balls.txt
+# each ball in a single line
+# red balls first, from small to large
+# then put the blue ball at the bottom line
+
+# Run this script, it will stop when you get the money
+
 function get_red_balls(){
   RED_BALL=`expr $RANDOM % 33 + 1`
   for EXISTING_BALL in `cat red_balls.txt` ; do
