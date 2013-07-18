@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+#On ubuntu, the default sh was linked to dash. A mistake occered 
+#when I run it. This is the detail of the mistake. So I prefer to
+#set the shell directly to bash
+#./how_lucky_you_are.sh: 18: ./how_lucky_you_are.sh: Syntax error: "(" unexpected
 
 # Let's see how lucky you are
 # 
@@ -56,6 +60,14 @@ do
   get_blue_ball
   format_numbers
   FORMATED_NUMBERS_MD5SUM=`md5sum formated_numbers.txt | awk '{print $1}'`
+#When the my_balls.txt is missing the MY_BALLS_MD5SUM could be a NULL.
+#So this if statement will cause a mistake. I think there is 2 way to 
+# avoid this.
+#1. Test if the my_balls.txt exist at the begining.
+#2. Modify this if statement as this:
+#if [ "test"$MY_BALLS_MD5SUM == "test"$FORMATED_NUMBERS_MD5SUM ]; then
+#   as add a string in front of the variable, even if the variable not exist,
+#   there will be no mistake. 
   if [ $MY_BALLS_MD5SUM == $FORMATED_NUMBERS_MD5SUM ]; then
     echo "You finally get 500W RMB after you buy this $TIMES times!"
     exit
@@ -64,3 +76,5 @@ do
   echo You have tried $TIMES times.
   cat /dev/null > formated_numbers.txt
 done
+#I think this script read and write files so many times,so
+#the performance is not good
