@@ -15,7 +15,7 @@
 
 # Run this script, it will stop when you get the money
 
-function get_red_balls(){
+function get_red_ball(){
   RED_BALL=`expr $RANDOM % 33 + 1`
   for EXISTING_BALL in `cat red_balls.txt` ; do
     if [ $EXISTING_BALL == $RED_BALL ] ; then
@@ -31,7 +31,7 @@ function get_all_red_balls(){
   MAX_NUMBER=6
   while [[ ${RED_BALL_NUMBER} -lt ${MAX_NUMBER} ]]
   do
-    get_red_balls
+    get_red_ball
     RED_BALL_NUMBER=`wc -l red_balls.txt | awk '{print $1}'`
   done
 }
