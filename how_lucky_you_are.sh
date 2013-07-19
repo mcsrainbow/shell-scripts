@@ -15,6 +15,38 @@
 # 
 # Run this script, it will stop when you get the money
 
+function check_my_balls(){
+  if [ ! -f "my_balls.txt" ] ; then
+    echo "The file my_balls.txt does not exist."
+    exit 1
+  fi
+  MY_BALLS_NUMBER=`wc -l my_balls.txt | awk '{print $1}'`
+  if [ $MY_BALLS_NUMBER -ne 7 ] ; then
+    echo "You need 7 balls in my_balls.txt."
+    exit 1
+  fi
+  for BALL in `cat my_balls.txt`
+  do
+    echo $BALL | grep "[^1-9]"
+    if [ $? -eq 0 ]; then
+      echo "BALL: $BALL is not an integer."
+      exit 1
+    fi
+  done
+  for BALL in `head -n 6 my_balls.txt`
+  do
+    if [ $BALL -gt 33 ] ; then
+      echo "RED BALL: $BALL is greater than 33."
+      exit 1
+    fi
+  done
+  LAST_BALL=`tail -n 1 my_balls.txt`
+  if [ $LAST_BALL -gt 16 ] ; then
+    echo "BLUE BALL: $LAST_BALL is greater than 16."
+    exit 1
+  fi
+}
+
 function get_red_ball(){
   RED_BALL=`expr $RANDOM % 33 + 1`
   for EXISTING_BALL in `cat red_balls.txt` ; do
@@ -48,6 +80,7 @@ function sort_balls(){
   cat /dev/null > red_balls.txt
 }
 
+check_my_balls
 MY_BALLS_MD5SUM=`md5sum my_balls.txt | awk '{print $1}'`
 TIMES=1
 while true
