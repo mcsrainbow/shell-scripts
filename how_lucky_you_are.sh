@@ -93,7 +93,7 @@ do
     echo "You finally got 500W RMB after you bought this $TIMES times!"
     exit 0
   fi
-  TIMES=`expr $TIMES + 1`
   echo "You have tried $TIMES times."
+  TIMES=`expr $TIMES + 1`
   cat /dev/null > sorted_balls.txt
 done
