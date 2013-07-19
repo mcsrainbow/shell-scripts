@@ -12,7 +12,7 @@
 # each ball in a single line
 # red balls first, from small to large
 # then put the blue ball at the bottom line
-
+# 
 # Run this script, it will stop when you get the money
 
 function get_red_ball(){
