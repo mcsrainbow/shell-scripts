@@ -1,0 +1,4 @@
+cd /var
+ls
+sleep 5
+tail -n 5 log/messages
