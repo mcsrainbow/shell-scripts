@@ -42,9 +42,9 @@ function get_blue_ball(){
   echo $BLUE_BALL > blue_ball.txt
 }
 
-function format_numbers(){
-  cat red_balls.txt | sort -n >> formated_numbers.txt
-  cat blue_ball.txt >> formated_numbers.txt
+function sort_balls(){
+  cat red_balls.txt | sort -n >> sorted_balls.txt
+  cat blue_ball.txt >> sorted_balls.txt
   cat /dev/null > red_balls.txt
 }
 
@@ -54,13 +54,13 @@ while true
 do
   get_all_red_balls
   get_blue_ball
-  format_numbers
-  FORMATED_NUMBERS_MD5SUM=`md5sum formated_numbers.txt | awk '{print $1}'`
-  if [ $MY_BALLS_MD5SUM == $FORMATED_NUMBERS_MD5SUM ]; then
+  sort_balls
+  SORTED_BALLS_MD5SUM=`md5sum sorted_balls.txt | awk '{print $1}'`
+  if [ $MY_BALLS_MD5SUM == $SORTED_BALLS_MD5SUM ]; then
     echo "You finally got 500W RMB after you bought this $TIMES times!"
     exit 0
   fi
   TIMES=`expr $TIMES + 1`
   echo "You have tried $TIMES times."
-  cat /dev/null > formated_numbers.txt
+  cat /dev/null > sorted_balls.txt
 done
