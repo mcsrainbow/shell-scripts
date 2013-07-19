@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Let's see how lucky you are
 # 
@@ -22,7 +22,7 @@ function get_red_balls(){
       return
     fi
   done
-  echo RED: $RED_BALL
+  echo "RED: $RED_BALL"
   echo $RED_BALL >> red_balls.txt
 }
 
@@ -38,7 +38,7 @@ function get_all_red_balls(){
 
 function get_blue_ball(){
   BLUE_BALL=`expr $RANDOM % 16 + 1`
-  echo BLUE: $BLUE_BALL
+  echo "BLUE: $BLUE_BALL"
   echo $BLUE_BALL > blue_ball.txt
 }
 
@@ -57,10 +57,10 @@ do
   format_numbers
   FORMATED_NUMBERS_MD5SUM=`md5sum formated_numbers.txt | awk '{print $1}'`
   if [ $MY_BALLS_MD5SUM == $FORMATED_NUMBERS_MD5SUM ]; then
-    echo "You finally get 500W RMB after you buy this $TIMES times!"
-    exit
+    echo "You finally got 500W RMB after you bought this $TIMES times!"
+    exit 0
   fi
   TIMES=`expr $TIMES + 1`
-  echo You have tried $TIMES times.
+  echo "You have tried $TIMES times."
   cat /dev/null > formated_numbers.txt
 done
