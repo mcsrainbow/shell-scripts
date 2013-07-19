@@ -22,7 +22,7 @@ function check_my_balls(){
   fi
   MY_BALLS_NUMBER=`wc -l my_balls.txt | awk '{print $1}'`
   if [ $MY_BALLS_NUMBER -ne 7 ]; then
-    echo "You need 7 balls in my_balls.txt."
+    echo "Just put 7 balls in my_balls.txt."
     exit 1
   fi
   for BALL in `cat my_balls.txt`
@@ -35,6 +35,7 @@ function check_my_balls(){
     echo $BALL | grep "[0][1-9]"
     if [ $? -eq 0 ]; then
       echo "Don't put 0 before numbers 1-9."
+      exit 1
     fi
   done
   for BALL in `head -n 6 my_balls.txt`
@@ -85,6 +86,7 @@ function sort_balls(){
 }
 
 check_my_balls
+touch red_balls.txt
 MY_BALLS_MD5SUM=`md5sum my_balls.txt | awk '{print $1}'`
 TIMES=1
 while true
