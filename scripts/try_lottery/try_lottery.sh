@@ -92,6 +92,7 @@ function get_blue_ball(){
 function sort_balls(){
   cat red_balls.txt | sort -n >> sorted_balls.txt
   cat blue_ball.txt >> sorted_balls.txt
+  # Clean red balls
   cat /dev/null > red_balls.txt
 }
 
@@ -121,5 +122,6 @@ do
   # Display the number of times it ran
   echo "You have tried $TIMES times."
   TIMES=`expr $TIMES + 1`
+  # Clean all balls
   cat /dev/null > sorted_balls.txt
 done
