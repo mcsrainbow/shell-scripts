@@ -32,7 +32,7 @@ function check_my_balls(){
       echo "BALL: $BALL is not an integer."
       exit 1
     fi
-    echo $BALL | grep "[0][1-9]"
+    echo $BALL | grep "[0][0-9]"
     if [ $? -eq 0 ]; then
       echo "Don't put 0 before numbers 1-9."
       exit 1
