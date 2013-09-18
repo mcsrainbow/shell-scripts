@@ -35,9 +35,9 @@ function check_status(){
 }
 
 function kill_status(){
-  stauts_pid=$(ps aux | grep checkstatus.py | grep -v dong.guo | head -n 1 | awk '{print $2}')
-  if [ -n "$pid" ]; then
-    kill -9 $pid
+  stauts_pid=$(ps aux | grep checkstatus.py | grep -v grep | awk '{print $2}')
+  if [ -n "$stauts_pid" ]; then
+    kill -9 $stauts_pid
   fi
 }
 
@@ -47,7 +47,7 @@ case $1 in
   on)
     route -n | grep -q 10.20.
     if [ $? -eq 0 ]; then
-      echo "Already - Connected to vpnserver"
+      echo "OK - Already connected to vpnserver"
       exit 0
     fi
     $openvpn --daemon --cd $home_dir --log $log_file --writepid $pid_file --config $conf_file --auth-nocache
@@ -77,13 +77,17 @@ case $1 in
   off)
     route -n | grep -q 10.20.
     if [ $? -ne 0 ]; then
-      echo "Already - Disconnected to vpnserver"
+      echo "Already disconnected to vpnserver"
       exit 0
     fi
     kill -9 `cat $pid_file`
     echo "Disconnected to vpnserver"
     copy_local
     kill_status
+    ;;
+
+  log)
+    tailf $log_file
     ;;
 
     *)
