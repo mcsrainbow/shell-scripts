@@ -1,0 +1,7 @@
+# override default of no subsystems
+#Subsystem  sftp    /usr/libexec/openssh/sftp-server
+Subsystem   sftp    internal-sftp
+
+Match Group sftpusers
+        ChrootDirectory /home/sftp/%u
+                ForceCommand internal-sftp
