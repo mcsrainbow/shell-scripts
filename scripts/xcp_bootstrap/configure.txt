@@ -1,0 +1,6 @@
+[root@xcphost ~]# xe vm-param-set uuid=c77040ae-3a50-9217-ff03-41992c34d1ec HVM-boot-policy=""
+[root@xcphost ~]# xe vm-param-set uuid=c77040ae-3a50-9217-ff03-41992c34d1ec PV-bootloader="pygrub"
+[root@xcphost ~]# xe vm-param-set uuid=c77040ae-3a50-9217-ff03-41992c34d1ec PV-args="_hostname=xcpvm _ipaddr=192.168.1.121 _netmask=255.255.255.0 _gateway=192.168.1.1"
+
+[root@xcpvm ~]# cat /proc/cmdline 
+ro root=/dev/mapper/vg_t-lv_root rd_NO_LUKS LANG=en_US.UTF-8 rd_NO_MD SYSFONT=latarcyrheb-sun16 rd_LVM_LV=vg_t/lv_root crashkernel=129M@0M KEYBOARDTYPE=pc KEYTABLE=us rd_NO_DM rhgb quiet  _hostname=xcpvm _ipaddr=192.168.1.121 _netmask=255.255.255.0 _gateway=192.168.1.1
