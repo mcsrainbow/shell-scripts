@@ -11,7 +11,7 @@ do
   t_mem_g=$(($t_mem_m/1024))
   f_mem_g=$(($f_mem_m/1024))
   
-  disk_uuid=$(xe sr-list | grep -A 2 -B 1 "Local storage" | grep -B 3 "$host" | grep uuid | awk -F ": " '{print $2}')
+  disk_uuid=$(xe sr-list | grep -A 2 -B 1 "Local storage" | grep -B 3 -w "$host" | grep uuid | awk -F ": " '{print $2}')
   t_disk_b=$(xe sr-param-list uuid=$disk_uuid | grep physical-size | cut -d : -f 2)
   u_disk_b=$(xe sr-param-list uuid=$disk_uuid | grep physical-utilisation | cut -d : -f 2)
   f_disk_b=$(($t_disk_b-$u_disk_b))
