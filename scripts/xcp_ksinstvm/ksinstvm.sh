@@ -8,8 +8,8 @@
 # otherwise it failed if through the gateway
 
 vm_name=t_c64_min
-repo_url=http://172.16.4.11/repo/centos/6/
-ks_args="ip=172.16.4.254 netmask=255.255.252.0 gateway=172.16.4.1 ns=172.16.4.10 noipv6 ks=http://172.16.4.11/repo/ks/centos-6.4-x86_64-minimal.ks ksdevice=eth0"
+repo_url=http://10.100.1.2/repo/centos/6/
+ks_args="ip=10.100.1.254 netmask=255.255.255.0 gateway=10.100.1.1 ns=10.100.1.10 noipv6 ks=http://10.100.1.2/repo/ks/centos-6.4-x86_64-minimal.ks ksdevice=eth0"
 cpu_cores=4
 mem_size=8G
 disk_size=20G
