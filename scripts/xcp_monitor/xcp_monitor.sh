@@ -1,15 +1,16 @@
 #!/bin/bash
 
 function get_info(){
-  host=$1
-  guest_vm=$(ssh $host "xl list-vm |awk '{print \$3}' |grep -vw name |sort -n |xargs")
+  host_name=$1
+  host_uuid=$(xe host-list |grep -w ${host_name} -B1 |grep -w uuid |awk '{print $NF}')
+  guest_vm=$(xe vm-list resident-on=${host_uuid} is-control-domain=false |grep -w name-label |awk '{print $NF}' |sort -n |xargs)
    
-  t_mem_m=$(ssh $host 'xl info |grep total_memory |cut -d : -f 2')
-  f_mem_m=$(ssh $host 'xl info |grep free_memory |cut -d : -f 2')
-  t_mem_g=$(($t_mem_m/1024))
-  f_mem_g=$(($f_mem_m/1024))
+  t_mem_m=$(xe host-param-list uuid=${host_uuid} |grep -w memory-total |awk '{print $NF}')
+  f_mem_m=$(xe host-param-list uuid=${host_uuid} |grep -w memory-free-computed |awk '{print $NF}')
+  t_mem_g=$(($t_mem_m/1024/1024/1024))
+  f_mem_g=$(($f_mem_m/1024/1024/1024))
 
-  xe sr-list |grep -A2 -B3 -w $host |grep -A1 -B4 -Ew 'lvm|ext' |grep -w name-label |awk -F ': ' '{print $2}' > /tmp/sr_items.tmp
+  xe sr-list |grep -A2 -B3 -w ${host_name} |grep -A1 -B4 -Ew 'lvm|ext' |grep -w name-label |awk -F ': ' '{print $2}' > /tmp/sr_items.tmp
   disk_info=""
   while read sr_name
   do
@@ -22,7 +23,7 @@ function get_info(){
     disk_info="${f_disk_g}/${t_disk_g}G $disk_info"
   done < /tmp/sr_items.tmp
 
-  t_cpu_num=$(ssh $host 'xe host-cpu-info |grep -w cpu_count |awk -F ": " "{print \$2}"')
+  t_cpu_num=$(xe host-param-list uuid=${host_uuid} | grep -w 'cpu_count' | awk '{print $4}' | cut -d";" -f1)
   v_cpu_sum=0
   for vm in $guest_vm
   do
@@ -37,11 +38,11 @@ function get_info(){
 }
 
 if [ $# == 0 ]; then
-  host_list=$(xe vm-list params |grep "Control domain on host: " |awk -F ": " '{print $3}' |cut -d . -f 1 |sort -n)
-  for host in $host_list
+  host_list=$(xe host-list |grep name-label |awk '{print $4}' |cut -d. -f1 |sort -n)
+  for host_name in $host_list
   do
     echo "-------------------------------------------------------"
-    get_info $host
+    get_info ${host_name}
   done
 else
   get_info $1
