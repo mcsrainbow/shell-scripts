@@ -5,10 +5,10 @@ function get_info(){
   host_uuid=$(xe host-list |grep -w ${host_name} -B1 |grep -w uuid |awk '{print $NF}')
   guest_vm=$(xe vm-list resident-on=${host_uuid} is-control-domain=false |grep -w name-label |awk '{print $NF}' |sort -n |xargs)
    
-  t_mem_m=$(xe host-param-list uuid=${host_uuid} |grep -w memory-total |awk '{print $NF}')
-  f_mem_m=$(xe host-param-list uuid=${host_uuid} |grep -w memory-free-computed |awk '{print $NF}')
-  t_mem_g=$(($t_mem_m/1024/1024/1024))
-  f_mem_g=$(($f_mem_m/1024/1024/1024))
+  t_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-total |awk '{print $NF}')
+  f_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-free-computed |awk '{print $NF}')
+  t_mem_g=$(($t_mem_b/1024/1024/1024))
+  f_mem_g=$(($f_mem_b/1024/1024/1024))
 
   xe sr-list |grep -A2 -B3 -w ${host_name} |grep -A1 -B4 -Ew 'lvm|ext' |grep -w name-label |awk -F ': ' '{print $2}' > /tmp/sr_items.tmp
   disk_info=""
