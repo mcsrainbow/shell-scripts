@@ -23,7 +23,7 @@ function get_info(){
     disk_info="${f_disk_g}/${t_disk_g}G $disk_info"
   done < /tmp/sr_items.tmp
 
-  t_cpu_num=$(xe host-param-list uuid=${host_uuid} | grep -w 'cpu_count' | awk '{print $4}' | cut -d";" -f1)
+  t_cpu_num=$(xe host-param-list uuid=${host_uuid} |grep -w 'cpu_count' |awk '{print $4}' |cut -d";" -f1)
   v_cpu_sum=0
   for vm in $guest_vm
   do
