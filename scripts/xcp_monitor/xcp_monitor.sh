@@ -33,7 +33,7 @@ function get_info(){
   done
   f_cpu_num=$(($t_cpu_num-$v_cpu_sum))
    
-  echo "Host $host: \"$guest_vm\""
+  echo "Host $host_name: \"$guest_vm\""
   echo "Available: \"Mem=${f_mem_g}/${t_mem_g}G  Disk=${disk_info} CPU=${f_cpu_num}/${t_cpu_num}Cores\""
 }
 
