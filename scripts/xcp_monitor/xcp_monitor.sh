@@ -3,7 +3,9 @@
 function get_info(){
   host_name=$1
   host_uuid=$(xe host-list |grep -w ${host_name} -B1 |grep -w uuid |awk '{print $NF}')
-  guest_vm=$(xe vm-list resident-on=${host_uuid} is-control-domain=false |grep -w name-label |awk '{print $NF}' |sort -n |xargs)
+  running_vm=$(xe vm-list resident-on=${host_uuid} is-control-domain=false |grep -w name-label |awk -F ": " '{print $NF}' |sort -n |xargs)
+  halted_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false is-a-template=false power-state=halted |grep -w name-label |awk -F ": " '{print $NF"(halted)"}' |sort -n |xargs)
+  suspended_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false is-a-template=false power-state=suspended |grep -w name-label |awk -F ": " '{print $NF"(suspended)"}' |sort -n |xargs)
    
   t_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-total |awk '{print $NF}')
   f_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-free-computed |awk '{print $NF}')
@@ -23,17 +25,24 @@ function get_info(){
     disk_info="${f_disk_g}/${t_disk_g}G $disk_info"
   done < /tmp/sr_items.tmp
 
-  t_cpu_num=$(xe host-param-list uuid=${host_uuid} |grep -w 'cpu_count' |awk '{print $4}' |cut -d";" -f1)
+  t_cpu_num=$(xe host-param-list uuid=${host_uuid} | grep -w 'cpu_count' | awk '{print $4}' | cut -d";" -f1)
   v_cpu_sum=0
-  for vm in $guest_vm
+  for vm in $running_vm
   do
     vm_uuid=$(xe vm-list |grep -B 1 -w $vm |head -n 1 |awk -F ": " '{print $2}')
     v_cpu_num=$(xe vm-list params=VCPUs-number uuid=${vm_uuid} |grep -w VCPUs |awk -F ": " '{print $2}')
     v_cpu_sum=$(($v_cpu_sum+$v_cpu_num))
   done
   f_cpu_num=$(($t_cpu_num-$v_cpu_sum))
-   
-  echo "Host $host_name: \"$guest_vm\""
+  
+  echo -n "Host $host_name: \"$running_vm\" "
+  if [ ! -z "$halted_vm" ]; then 
+    echo -n "\"$halted_vm\" "
+  fi
+  if [ ! -z "$suspended_vm" ]; then 
+    echo -n "\"$suspended_vm\" "
+  fi
+  echo ""
   echo "Available: \"Mem=${f_mem_g}/${t_mem_g}G  Disk=${disk_info} CPU=${f_cpu_num}/${t_cpu_num}Cores\""
 }
 
