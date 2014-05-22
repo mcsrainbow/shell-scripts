@@ -4,8 +4,8 @@ function get_info(){
   host_name=$1
   host_uuid=$(xe host-list |grep -w ${host_name} -B1 |grep -w uuid |awk '{print $NF}')
   running_vm=$(xe vm-list resident-on=${host_uuid} is-control-domain=false |grep -w name-label |awk -F ": " '{print $NF}' |sort -n |xargs)
-  halted_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false is-a-template=false power-state=halted |grep -w name-label |awk -F ": " '{print $NF"(halted)"}' |sort -n |xargs)
-  suspended_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false is-a-template=false power-state=suspended |grep -w name-label |awk -F ": " '{print $NF"(suspended)"}' |sort -n |xargs)
+  halted_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false power-state=halted |grep -w name-label |awk -F ": " '{print $NF"(halted)"}' |sort -n |xargs)
+  suspended_vm=$(xe vm-list affinity=${host_uuid} is-control-domain=false power-state=suspended |grep -w name-label |awk -F ": " '{print $NF"(suspended)"}' |sort -n |xargs)
    
   t_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-total |awk '{print $NF}')
   f_mem_b=$(xe host-param-list uuid=${host_uuid} |grep -w memory-free-computed |awk '{print $NF}')
