@@ -21,7 +21,7 @@ function check_conf(){
 }
 
 function check_status(){
-  netstat -rn | grep -q '1.0.1/24'
+  netstat -rn | grep -Eq '^1.0.1/24'
   if [ $? -ne 0 ]; then
     echo "SmartRoutes is OFF"
   else
@@ -61,7 +61,7 @@ function del_routes(){
 }
 
 function run_smartroutes(){
-  netstat -rn | grep -q '1.0.1/24'
+  netstat -rn | grep -Eq '^1.0.1/24'
   if [ $? -ne 0 ]; then
     add_routes
   else
@@ -70,7 +70,7 @@ function run_smartroutes(){
 }
 
 function del_smartroutes(){
-  netstat -rn | grep -q '1.0.1/24'
+  netstat -rn | grep -Eq '^1.0.1/24'
   if [ $? -eq 0 ]; then
     del_routes
   else
