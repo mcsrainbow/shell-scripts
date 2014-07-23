@@ -20,6 +20,10 @@ function check_conf(){
   fi
 }
 
+function update_conf(){
+  wget http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest -O ${conf}
+}
+
 function check_status(){
   netstat -rn | grep -Eq '^1.0.1/24'
   if [ $? -ne 0 ]; then
@@ -86,6 +90,9 @@ case $1 in
     ;;
   off)
     del_smartroutes
+    ;;
+  update)
+    update_conf
     ;;
   *)
     check_status
