@@ -50,8 +50,6 @@ function add_routes(){
 }
 
 function del_routes(){
-  oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
-
   all_subs=$(grep CN ${conf} | grep ipv4 | awk -F '|' '{print $4"/"$5}')
   echo -n "Deleting the routes..."
   for subnet in ${all_subs}
@@ -59,7 +57,7 @@ function del_routes(){
     subneti=$(echo ${subnet} | cut -d/ -f1)
     rawnetm=$(echo ${subnet} | cut -d/ -f2)
     subnetm=$(awk -v c=${rawnetm} 'function log2(x){if(x<2)return(pow);pow--;return(log2(x/2))}BEGIN{pow=32;print log2(c)}')
-    route delete ${subneti}/${subnetm} "${oldgw}" > /dev/null
+    route delete ${subneti}/${subnetm} > /dev/null
   done
   echo " Done"
 }
