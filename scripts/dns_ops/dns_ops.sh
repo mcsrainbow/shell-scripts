@@ -100,7 +100,7 @@ else
           echo ${base_dir}/${domain}.zone does not exist
           exit 1 
         else
-        update_record
+          update_record
         fi
       fi
       ;;
