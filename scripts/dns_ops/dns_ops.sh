@@ -3,7 +3,6 @@
 base_dir=/var/named
 server_ipaddr=172.16.8.246
 domain=heylinux.com
-ptr=8.16.172
 private_file=Kheylinux.com.+157+59510.private
 dnsaddfile=${base_dir}/dnsadd
 
