@@ -16,6 +16,7 @@ function check_root()
 
 function print_help(){
   echo "Usage: ${0} -t A|CNAME|PTR -u add|del -n servername -v record_value"
+  echo "Examples:"
   echo "${0} -t A -u add -n ns1 -v 172.16.8.246"
   echo "${0} -t A -u del -n ns1 -v 172.16.8.246"
   echo "${0} -t CNAME -u add -n ns3 -v ns1.heylinux.com"
