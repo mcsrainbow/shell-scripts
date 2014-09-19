@@ -25,7 +25,6 @@ function print_help(){
   exit 1
 }
 
-
 function update_record(){
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
   echo "zone ${domain}" >> ${dnsaddfile}
