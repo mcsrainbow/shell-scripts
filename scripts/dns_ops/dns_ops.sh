@@ -3,7 +3,7 @@
 base_dir=/var/named
 server_ipaddr=172.16.8.246
 domain=heylinux.com
-private_file=Kheylinux.com.+157+59510.private
+private_file=${base_dir}/Kheylinux.com.+157+59510.private
 dnsaddfile=${base_dir}/dnsadd
 
 function check_root()
@@ -32,7 +32,7 @@ function update_record(){
   echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}" >> ${dnsaddfile}
   echo "send" >> ${dnsaddfile}
   
-  /usr/bin/nsupdate -k ${base_dir}/${private_file} ${dnsaddfile} 
+  /usr/bin/nsupdate -k ${private_file} ${dnsaddfile} 
 
   if [ $? -eq 0 ]; then
     echo "Successful"
@@ -58,7 +58,7 @@ do
     "v")
       record_value=$OPTARG
       ;;
-    "*")
+    *)
       print_help
       ;;
   esac
@@ -75,7 +75,7 @@ else
     "del")
       action=delete
       ;;
-    "*")
+    *)
       print_help
       ;;  
   esac
@@ -104,7 +104,7 @@ else
         fi
       fi
       ;;
-    "*")
+    *)
       print_help
       ;;  
   esac 
