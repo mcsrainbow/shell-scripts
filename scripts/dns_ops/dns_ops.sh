@@ -40,6 +40,8 @@ function update_record(){
     echo "Failed because duplicate/nonexistent record"
     exit $?
   fi
+
+  /usr/sbin/rndc freeze ${domain}
 }
 
 check_root
