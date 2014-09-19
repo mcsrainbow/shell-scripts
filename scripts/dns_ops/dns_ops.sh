@@ -43,7 +43,7 @@ function update_record(){
 
   /usr/sbin/rndc freeze ${domain}
   /usr/sbin/rndc reload ${domain}
-  /usr/sbin/rndc thaw ${domain
+  /usr/sbin/rndc thaw ${domain}
 }
 
 check_root
