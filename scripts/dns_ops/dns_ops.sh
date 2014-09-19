@@ -26,6 +26,15 @@ function print_help(){
   exit 1
 }
 
+function check_servername(){
+  echo $servername | grep -wq ${domain}
+  if [ $? -eq 0 ]; then
+    hostname=$(echo $servername | cut -d. -f1)
+    echo "'${servername}' is malformed. Servername should be just '${hostname}' without the '${domain}'"
+    exit 1
+  fi 
+}
+
 function update_record(){
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
   echo "zone ${domain}" >> ${dnsaddfile}
@@ -85,9 +94,11 @@ else
   esac
   case "$record_type" in 
     "A")
+      check_servername
       update_record
       ;;
     "CNAME")
+      check_servername
       update_record
       ;;
     "PTR")
