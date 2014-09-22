@@ -45,14 +45,14 @@ function check_fqdn(){
 
 function check_prereq(){
   if [ $action == "add" ]; then
-    if [ $record_type != "PTR" ]; then
-      echo "prereq nxdomain ${servername}.${domain}" >> ${dnsaddfile} 
+    if [ $record_type == "PTR" ]; then
+        echo "prereq nxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
+      else
+        echo "prereq nxdomain ${servername}.${domain}" >> ${dnsaddfile} 
     fi
   fi
   if [ $action == "delete" ]; then
-    if [ $record_type != "PTR" ]; then
-      echo "prereq yxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
-    fi
+    echo "prereq yxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
   fi
 }
 
