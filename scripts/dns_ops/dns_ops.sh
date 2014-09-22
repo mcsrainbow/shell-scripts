@@ -35,9 +35,31 @@ function check_servername(){
   fi 
 }
 
+function check_fqdn(){
+  echo $record_value | grep -q '\.'
+  if [ $? -ne 0 ]; then
+    echo "'${record_value}' is malformed. Should be a FQDN"
+    exit 1
+  fi 
+}
+
+function check_prereq(){
+  if [ $action == "add" ]; then
+    if [ $record_type != "PTR" ]; then
+      echo "prereq nxdomain ${servername}.${domain}" >> ${dnsaddfile} 
+    fi
+  fi
+  if [ $action == "delete" ]; then
+    if [ $record_type != "PTR" ]; then
+      echo "prereq yxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
+    fi
+  fi
+}
+
 function update_record(){
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
   echo "zone ${domain}" >> ${dnsaddfile}
+  check_prereq
   echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}" >> ${dnsaddfile}
   echo "send" >> ${dnsaddfile}
   
@@ -99,15 +121,17 @@ else
       ;;
     "CNAME")
       check_servername
+      check_fqdn
       update_record
       ;;
     "PTR")
-      a=$(echo $servername |cut -d. -f1)
-      b=$(echo $servername |cut -d. -f2)
-      c=$(echo $servername |cut -d. -f3)
-      d=$(echo $servername |cut -d. -f4)
+      check_fqdn
+      a=$(echo $servername |cut -d. -f1 |grep -Ev '[a-z]|[A-Z]')
+      b=$(echo $servername |cut -d. -f2 |grep -Ev '[a-z]|[A-Z]')
+      c=$(echo $servername |cut -d. -f3 |grep -Ev '[a-z]|[A-Z]')
+      d=$(echo $servername |cut -d. -f4 |grep -Ev '[a-z]|[A-Z]')
       if [ -z "$a" ] || [ -z "$b" ] || [ -z "$c" ] || [ -z "$d" ]; then
-        print_help
+        echo "'${servername}' is malformed. Should be a IP address"
       else
         domain=$c.$b.$a.in-addr.arpa
         servername=$d
