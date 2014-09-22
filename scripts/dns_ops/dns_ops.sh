@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# DNS records management tool for bind9
+# By Dong Guo from heylinux.com
+
 base_dir=/var/named
 server_ipaddr=172.16.8.246
 domain=heylinux.com
@@ -44,6 +47,7 @@ function check_fqdn(){
 }
 
 function check_prereq(){
+  # Check if the prerequisite is satisfied, such as duplicate and nonexistent
   if [ $action == "add" ]; then
     if [ $record_type == "PTR" ]; then
         echo "prereq nxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
@@ -62,16 +66,22 @@ function update_record(){
   check_prereq
   echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}" >> ${dnsaddfile}
   echo "send" >> ${dnsaddfile}
-  
+ 
+  echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}"
   /usr/bin/nsupdate -k ${private_file} ${dnsaddfile} 
 
   if [ $? -eq 0 ]; then
     echo "Successful"
   else
-    echo "Failed because duplicate/nonexistent record"
+    if [ $action == "add" ]; then
+      echo "Failed because duplicate record"
+    elif [ $action == "delete" ]; then
+      echo "Failed because nonexistent/protected record"
+    fi
     exit $?
   fi
 
+  # Write DNS records into zone file immediately, by default it does every 15 minutes
   /usr/sbin/rndc freeze ${domain}
   /usr/sbin/rndc reload ${domain}
   /usr/sbin/rndc thaw ${domain}
