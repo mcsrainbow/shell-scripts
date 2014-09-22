@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DNS records management tool for bind9
+# DNS records management tool for Bind9
 # By Dong Guo from heylinux.com
 
 base_dir=/var/named
