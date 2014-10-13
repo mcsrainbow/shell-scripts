@@ -8,33 +8,35 @@
 . /etc/init.d/functions
 
 ### Default variables
-prog="your_prog_name"
-pidfile="/var/run/your_prog_name.pid"
+prog_name="your_prog_name"
+prog_path="/usr/bin/${prog_name}"
+pidfile="/var/run/${prog_name}.pid"
+options="-c your_conf_file"
 
 # Check if requirements are met
-[ -x "/usr/bin/${prog}" ] || exit 1
+[ -x "${prog_path}" ] || exit 1
 
 RETVAL=0
 
 start(){
-  echo -n $"Starting $prog: "
-  daemon $prog
+  echo -n $"Starting $prog_name: "
+  daemon $prog_path $options
   RETVAL=$?
-  PID=$(pidof ${prog})
+  PID=$(pidof ${prog_path})
   if [ ! -z "${PID}" ]; then
     echo ${PID} > ${pidfile}
   fi
   echo
-  [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+  [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog_name
   return $RETVAL
 }
 
 stop(){
-  echo -n $"Shutting down $prog: "
+  echo -n $"Shutting down $prog_name: "
   killproc -p ${pidfile}
   RETVAL=$?
   echo
-  [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+  [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog_name
   return $RETVAL
 }
 
@@ -54,7 +56,7 @@ case "$1" in
     restart
     ;;
   status)
-    status $prog
+    status $prog_path
     RETVAL=$?
     ;;
   *)
@@ -63,3 +65,4 @@ case "$1" in
 esac
 
 exit $RETVAL
+
