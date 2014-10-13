@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Comments to support chkconfig
+# chkconfig: - 98 02
+# description: your_prog_name service script
+#
+# Source function library.
+. /etc/init.d/functions
+
+### Default variables
+prog="your_prog_name"
+pidfile="/var/run/your_prog_name.pid"
+
+# Check if requirements are met
+[ -x "/usr/bin/${prog}" ] || exit 1
+
+RETVAL=0
+
+start(){
+  echo -n $"Starting $prog: "
+  daemon $prog
+  RETVAL=$?
+  PID=$(pidof ${prog})
+  if [ ! -z "${PID}" ]; then
+    echo ${PID} > ${pidfile}
+  fi
+  echo
+  [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+  return $RETVAL
+}
+
+stop(){
+  echo -n $"Shutting down $prog: "
+  killproc -p ${pidfile}
+  RETVAL=$?
+  echo
+  [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+  return $RETVAL
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  status)
+    status $prog
+    RETVAL=$?
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart|status}"
+    RETVAL=1
+esac
+
+exit $RETVAL
