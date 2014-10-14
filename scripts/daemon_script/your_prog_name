@@ -23,9 +23,7 @@ start(){
   daemon $prog_path $options
   RETVAL=$?
   PID=$(pidof ${prog_path})
-  if [ ! -z "${PID}" ]; then
-    echo ${PID} > ${pidfile}
-  fi
+  [ ! -z "${PID}" ] && echo ${PID} > ${pidfile}
   echo
   [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog_name
   return $RETVAL
