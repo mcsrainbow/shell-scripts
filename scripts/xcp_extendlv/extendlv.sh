@@ -34,6 +34,7 @@ q"|fdisk ${disk}
   lv=$(df -h  | grep root | cut -d/ -f4 | cut -d- -f2)
   
   echo "resizing ${vg}-${lv}"
+  pvcreate ${disk}${num}
   pvresize ${disk}${num}
   vgextend ${vg} ${disk}${num}
   free=$(vgdisplay | grep Free | awk '{print $5}')
