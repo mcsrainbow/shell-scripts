@@ -22,8 +22,8 @@ drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:40 /user/oozie/data/dpp
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:49 /user/oozie/data/dpp/hive/ad_reports/adv_device_stats2/dt=2013-04-08-22-00
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:40 /user/oozie/data/dpp/hive/ad_reports/adv_geo_stats2/dt=2013-04-08-21-50
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:50 /user/oozie/data/dpp/hive/ad_reports/adv_geo_stats2/dt=2013-04-08-22-00
-drwxr-xr-x   - mapred supergroup          0 2013-04-22 05:01 /user/oozie/data/dpp/hive/ad_reports/adv_join_base2/_distcp_logs_10rcu3
-drwxr-xr-x   - mapred supergroup          0 2013-04-20 14:17 /user/oozie/data/dpp/hive/ad_reports/adv_join_base2/_distcp_logs_11k6cw
+drwxr-xr-x   - oozie supergroup          0 2013-04-22 05:01 /user/oozie/data/dpp/hive/ad_reports/adv_join_base2/_distcp_logs_10rcu3
+drwxr-xr-x   - oozie supergroup          0 2013-04-20 14:17 /user/oozie/data/dpp/hive/ad_reports/adv_join_base2/_distcp_logs_11k6cw
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:41 /user/oozie/data/dpp/hive/ad_reports/adv_pub_stats2/dt=2013-04-08-21-50
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:50 /user/oozie/data/dpp/hive/ad_reports/adv_pub_stats2/dt=2013-04-08-22-00
 drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:42 /user/oozie/data/dpp/hive/ad_reports/pub_partner_stats2/dt=2013-04-08-21-50
@@ -38,10 +38,10 @@ drwxr-xr-x   - oozie supergroup          0 2013-04-22 19:52 /user/oozie/data/dpp
 drwxr-xr-x   - oozie supergroup          0 2013-04-22 19:56 /user/oozie/data/dpp/hive/campaign_history/dt=2013-04-22-07
 drwxr-xr-x   - oozie supergroup          0 2013-05-01 00:32 /user/oozie/data/dpp/hive/conversion_prospects3/dt=2013-05-01-00-00
 drwxr-xr-x   - oozie supergroup          0 2013-05-01 00:35 /user/oozie/data/dpp/hive/conversion_prospects3/dt=2013-05-01-00-10
-drwxr-xr-x   - mapred supergroup          0 2013-04-22 11:10 /user/oozie/data/dpp/hive/conversions2/_distcp_logs_10da8p
-drwxr-xr-x   - mapred supergroup          0 2013-04-20 02:17 /user/oozie/data/dpp/hive/conversions2/_distcp_logs_11mewx
-drwxr-xr-x   - oozie  supergroup          0 2013-04-09 22:01 /user/oozie/data/dpp/hive/conversions_max_days2/dt=2013-04-07-00
-drwxr-xr-x   - heydevops supergroup          0 2013-04-09 14:17 /user/oozie/data/dpp/hive/conversions_max_days2/dt=2013-04-08-00
+drwxr-xr-x   - oozie supergroup          0 2013-04-22 11:10 /user/oozie/data/dpp/hive/conversions2/_distcp_logs_10da8p
+drwxr-xr-x   - oozie supergroup          0 2013-04-20 02:17 /user/oozie/data/dpp/hive/conversions2/_distcp_logs_11mewx
+drwxr-xr-x   - oozie supergroup          0 2013-04-09 22:01 /user/oozie/data/dpp/hive/conversions_max_days2/dt=2013-04-07-00
+drwxr-xr-x   - oozie supergroup          0 2013-04-09 14:17 /user/oozie/data/dpp/hive/conversions_max_days2/dt=2013-04-08-00
 drwxr-xr-x   - oozie supergroup          0 2013-04-18 21:54 /user/oozie/data/dpp/hive/pub_profit2/dt=2013-04-18-21-00
 drwxr-xr-x   - oozie supergroup          0 2013-04-18 21:54 /user/oozie/data/dpp/hive/pub_profit2/dt=2013-04-18-21-10
 drwxr-xr-x   - oozie supergroup          0 2013-04-20 01:22 /user/oozie/data/dpp/hive/pub_profit_daily/dt=2013-04-19
