@@ -9,6 +9,7 @@ LOCAL_PATH=/root/sftp_hdfs/data
 REMOTE_PATH=/downloads
 HDFS_PATH=/data/downloads
 FILTER_STRING=HeyLinux
+NUM_FILES_PER_DAY=4
 
 echo "###########${DATE}###########"
 
@@ -26,7 +27,7 @@ EOF
 
 for item in $list
 do 
-  if $(echo ${item} | grep -q $FILTER_STRING); then
+  if $(echo ${item} | grep -q ${FILTER_STRING}); then
     DATE_1=$(echo ${item} | awk -F "_" '{print $(NF-1)}')
     if [ ! -z "${DATE_1}" ]; then
       DATE_2=$(date +%Y-%m-%d -d ${DATE_1})
@@ -36,7 +37,14 @@ do
         echo "Downloading ${REMOTE_PATH}/${item} to ${LOCAL_PATH}/${DATE_2}"
         mget ${DATE_2} ${item}
         if [ $? -eq 0 ]; then
-          touch ${LOCAL_PATH}/${DATE_2}/${item}_SUCCESS
+          # Check if the gzip file is broken
+          if $( ls ${LOCAL_PATH}/${DATE_2}/${item} |grep -q ".gz"); then
+            if $(gzip -t ${LOCAL_PATH}/${DATE_2}/${item}); then
+              touch ${LOCAL_PATH}/${DATE_2}/${item}_SUCCESS
+            fi
+          else
+            touch ${LOCAL_PATH}/${DATE_2}/${item}_SUCCESS
+          fi
         fi
       fi
     fi
@@ -61,7 +69,7 @@ do
     LOCAL_COUNT=$(ls -1 ${LOCAL_PATH}/${DATE_2}/*_SUCCESS |wc -l)
     LOCAL_COUNT_REAL=$(ls -1 ${LOCAL_PATH}/${DATE_2}/ | grep -v _SUCCESS |wc -l)
     HDFS_COUNT=$(hadoop fs -ls ${HDFS_PATH}/${DATE_2}/*_SUCCESS |grep SUCCESS |wc -l)
-    if [ ${LOCAL_COUNT} -gt 0 ] && [ ${LOCAL_COUNT} -eq ${LOCAL_COUNT_REAL} ] && [ ${LOCAL_COUNT} -eq ${HDFS_COUNT} ]; then
+    if [ ${LOCAL_COUNT} -eq ${NUM_FILES_PER_DAY} ] && [ ${LOCAL_COUNT} -eq ${LOCAL_COUNT_REAL} ] && [ ${LOCAL_COUNT} -eq ${HDFS_COUNT} ]; then
       hadoop fs -rm ${HDFS_PATH}/${DATE_2}/*[a-z]_SUCCESS
       hadoop fs -touchz ${HDFS_PATH}/${DATE_2}/_SUCCESS
     fi
