@@ -3,11 +3,11 @@
 # DNS records management tool for Bind9
 # By Dong Guo from heylinux.com
 
-base_dir=/var/named
-server_ipaddr=172.16.8.246
-domain=heylinux.com
-private_file=${base_dir}/Kheylinux.com.+157+59510.private
-dnsaddfile=${base_dir}/dnsadd
+base_dir="/var/named"
+server_ipaddr="172.16.8.246"
+domain="heylinux.com"
+private_file="${base_dir}/Kheylinux.com.+157+59510.private"
+dnsaddfile="${base_dir}/dnsadd"
 
 function check_root(){
   if [ $EUID -ne 0 ]; then
