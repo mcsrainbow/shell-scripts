@@ -50,9 +50,9 @@ function check_prereq(){
   # Check if the prerequisite is satisfied, such as duplicate and nonexistent
   if [ $action == "add" ]; then
     if [ $record_type == "PTR" ]; then
-        echo "prereq nxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
-      else
-        echo "prereq nxdomain ${servername}.${domain}" >> ${dnsaddfile} 
+      echo "prereq nxrrset ${servername}.${domain} ${record_type} ${record_value}" >> ${dnsaddfile} 
+    else
+      echo "prereq nxdomain ${servername}.${domain}" >> ${dnsaddfile} 
     fi
   fi
   if [ $action == "delete" ]; then
