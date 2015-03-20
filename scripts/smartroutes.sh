@@ -60,33 +60,37 @@ function format_subnet(){
 }
 
 function add_exception(){
-  subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
-  netstat -rn | grep -Eq "^${subnet_exception_formatted}"
-  if [ $? -ne 0 ]; then
-    echo -n "Adding the routes..."
-    for subnet_exception in ${subnet_exceptions[@]}
-    do
-      oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
-      route add ${subnet_exception} "${oldgw}" > /dev/null
-    done
-    echo " Done"
-  else
-    echo "SmartRoutes Exception is already ON"
+  if [ ! -z "${subnet_exceptions[0]}" ]; then
+    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
+    if [ $? -ne 0 ]; then
+      echo -n "Adding the routes..."
+      for subnet_exception in ${subnet_exceptions[@]}
+      do
+        oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
+        route add ${subnet_exception} "${oldgw}" > /dev/null
+      done
+      echo " Done"
+    else
+      echo "SmartRoutes Exception is already ON"
+    fi
   fi
 }
 
 function del_exception(){
-  subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
-  netstat -rn | grep -Eq "^${subnet_exception_formatted}"
-  if [ $? -ne 0 ]; then
-    echo "SmartRoutes Exception is already OFF"
-  else
-    echo -n "Adding the routes..."
-    for subnet_exception in ${subnet_exceptions[@]}
-    do
-      route delete ${subnet_exception} > /dev/null
-    done
-  echo " Done"
+  if [ ! -z "${subnet_exceptions[0]}" ]; then
+    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
+    if [ $? -ne 0 ]; then
+      echo "SmartRoutes Exception is already OFF"
+    else
+      echo -n "Adding the routes..."
+      for subnet_exception in ${subnet_exceptions[@]}
+      do
+        route delete ${subnet_exception} > /dev/null
+      done
+    echo " Done"
+    fi
   fi
 }
 
