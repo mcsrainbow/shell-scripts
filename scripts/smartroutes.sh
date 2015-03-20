@@ -52,6 +52,7 @@ function check_status(){
 
   if [ ! -z "${subnet_exceptions[0]}" ]; then
     subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+
     netstat -rn | grep -Eq "^${subnet_exception_formatted}"
     if [ $? -ne 0 ]; then
       echo "SmartRoutes Exception is OFF"
@@ -64,6 +65,7 @@ function check_status(){
 function add_routes(){
   oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
   dscacheutil -flushcache
+
   all_subs=$(grep CN ${apnic_data} | grep ipv4 | awk -F '|' '{print $4"/"$5}')
   echo -n "Adding the routes..."
   for subnet in ${all_subs}
@@ -113,6 +115,7 @@ function format_subnet(){
   c=$(echo $1 |cut -d/ -f1 |cut -d. -f3)
   d=$(echo $1 |cut -d/ -f1 |cut -d. -f4)
   m=$(echo $1 |cut -d/ -f2)
+
   if [ $m -gt 24 ]; then
     echo "$a.$b.$c.$d/$m"
   elif [ $m -le 24 ] && [ $m -gt 16 ]; then
@@ -127,10 +130,12 @@ function format_subnet(){
 function add_exception(){
   if [ ! -z "${subnet_exceptions[0]}" ]; then
     subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+
     netstat -rn | grep -Eq "^${subnet_exception_formatted}"
     if [ $? -ne 0 ]; then
       oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
       dscacheutil -flushcache
+
       echo -n "Adding the routes..."
       for subnet_exception in ${subnet_exceptions[@]}
       do
@@ -146,6 +151,7 @@ function add_exception(){
 function del_exception(){
   if [ ! -z "${subnet_exceptions[0]}" ]; then
     subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+
     netstat -rn | grep -Eq "^${subnet_exception_formatted}"
     if [ $? -ne 0 ]; then
       echo "SmartRoutes Exception is already OFF"
