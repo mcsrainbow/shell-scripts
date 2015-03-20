@@ -23,17 +23,17 @@ function print_help(){
   echo "${0} [force|exception] {on|off}"
 }
 
+function check_data(){
+  if [ ! -f ${apnic_data} ]; then
+    update_data
+  fi
+}
+
 function check_size(){
   apnic_data_size=$(curl --head -s ${apnic_data_url} |grep Content-Length |awk '{print $2}' |col -b)
   apnic_data_size_local=$(ls -l ${apnic_data} |awk '{print $5}')
 
   if [ "${apnic_data_size}" != "${apnic_data_size_local}" ]; then
-    update_data
-  fi
-}
-
-function check_data(){
-  if [ ! -f ${apnic_data} ]; then
     update_data
   fi
 }
