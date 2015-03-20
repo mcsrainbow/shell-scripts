@@ -23,12 +23,6 @@ function print_help(){
   echo "${0} [force|exception] {on|off}"
 }
 
-function check_data(){
-  if [ ! -f ${apnic_data} ]; then
-    update_data
-  fi
-}
-
 function check_size(){
   apnic_data_size=$(curl --head -s ${apnic_data_url} |grep Content-Length |awk '{print $2}' |col -b)
   apnic_data_size_local=$(ls -l ${apnic_data} |awk '{print $5}')
@@ -38,60 +32,14 @@ function check_size(){
   fi
 }
 
+function check_data(){
+  if [ ! -f ${apnic_data} ]; then
+    update_data
+  fi
+}
+
 function update_data(){
   wget ${apnic_data_url} -O ${apnic_data}
-}
-
-function format_subnet(){
-  a=$(echo $1 |cut -d/ -f1 |cut -d. -f1)
-  b=$(echo $1 |cut -d/ -f1 |cut -d. -f2)
-  c=$(echo $1 |cut -d/ -f1 |cut -d. -f3)
-  d=$(echo $1 |cut -d/ -f1 |cut -d. -f4)
-  m=$(echo $1 |cut -d/ -f2)
-  if [ $m -gt 24 ]; then
-    echo "$a.$b.$c.$d/$m"
-  elif [ $m -le 24 ] && [ $m -gt 16 ]; then
-    echo "$a.$b.$c/$m"
-  elif [ $m -le 16 ] && [ $m -gt 8 ]; then
-    echo "$a.$b/$m"
-  elif [ $m -eq 8 ]; then
-    echo "$a/$m"
-  fi
-}
-
-function add_exception(){
-  if [ ! -z "${subnet_exceptions[0]}" ]; then
-    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
-    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
-    if [ $? -ne 0 ]; then
-      echo -n "Adding the routes..."
-      for subnet_exception in ${subnet_exceptions[@]}
-      do
-        oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
-        route add ${subnet_exception} "${oldgw}" > /dev/null
-      done
-      echo " Done"
-    else
-      echo "SmartRoutes Exception is already ON"
-    fi
-  fi
-}
-
-function del_exception(){
-  if [ ! -z "${subnet_exceptions[0]}" ]; then
-    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
-    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
-    if [ $? -ne 0 ]; then
-      echo "SmartRoutes Exception is already OFF"
-    else
-      echo -n "Adding the routes..."
-      for subnet_exception in ${subnet_exceptions[@]}
-      do
-        route delete ${subnet_exception} > /dev/null
-      done
-    echo " Done"
-    fi
-  fi
 }
 
 function check_status(){
@@ -116,7 +64,6 @@ function check_status(){
 function add_routes(){
   oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
   dscacheutil -flushcache
-
   all_subs=$(grep CN ${apnic_data} | grep ipv4 | awk -F '|' '{print $4"/"$5}')
   echo -n "Adding the routes..."
   for subnet in ${all_subs}
@@ -157,6 +104,59 @@ function del_smartroutes(){
     del_routes
   else
     echo "SmartRoutes is already OFF"
+  fi
+}
+
+function format_subnet(){
+  a=$(echo $1 |cut -d/ -f1 |cut -d. -f1)
+  b=$(echo $1 |cut -d/ -f1 |cut -d. -f2)
+  c=$(echo $1 |cut -d/ -f1 |cut -d. -f3)
+  d=$(echo $1 |cut -d/ -f1 |cut -d. -f4)
+  m=$(echo $1 |cut -d/ -f2)
+  if [ $m -gt 24 ]; then
+    echo "$a.$b.$c.$d/$m"
+  elif [ $m -le 24 ] && [ $m -gt 16 ]; then
+    echo "$a.$b.$c/$m"
+  elif [ $m -le 16 ] && [ $m -gt 8 ]; then
+    echo "$a.$b/$m"
+  elif [ $m -eq 8 ]; then
+    echo "$a/$m"
+  fi
+}
+
+function add_exception(){
+  if [ ! -z "${subnet_exceptions[0]}" ]; then
+    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
+    if [ $? -ne 0 ]; then
+      oldgw=$(netstat -nr | grep '^default' | grep -v 'ppp' | sed 's/default *\([0-9\.]*\) .*/\1/' | grep -Ev '^$')
+      dscacheutil -flushcache
+      echo -n "Adding the routes..."
+      for subnet_exception in ${subnet_exceptions[@]}
+      do
+        route add ${subnet_exception} "${oldgw}" > /dev/null
+      done
+      echo " Done"
+    else
+      echo "SmartRoutes Exception is already ON"
+    fi
+  fi
+}
+
+function del_exception(){
+  if [ ! -z "${subnet_exceptions[0]}" ]; then
+    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    netstat -rn | grep -Eq "^${subnet_exception_formatted}"
+    if [ $? -ne 0 ]; then
+      echo "SmartRoutes Exception is already OFF"
+    else
+      echo -n "Adding the routes..."
+      for subnet_exception in ${subnet_exceptions[@]}
+      do
+        route delete ${subnet_exception} > /dev/null
+      done
+    echo " Done"
+    fi
   fi
 }
 
