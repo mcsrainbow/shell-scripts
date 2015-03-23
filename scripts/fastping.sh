@@ -1,10 +1,10 @@
 #!/bin/bash 
 
 # default settings
-subnet=$1 # C type subnet
-retry=1 # retry times
-timeout=1 # timeout seconds
+retry=2 # retry times
+timeout=3 # timeout seconds
 output=/tmp/ping.output # output file
+subnet=$1 # C type subnet
 
 # function print_help
 function print_help(){
@@ -32,12 +32,22 @@ fi
 # clean the output file
 > ${output}
 
+function runping(){
+if $(echo $OSTYPE |grep -q darwin); then
+  # Mac OS
+  ping -t ${retry} -W ${timeout}000 -q ${subnet}.${i}
+else
+  # Linux/BSD
+  ping -c ${retry} -w ${timeout} -q ${subnet}.${i}
+fi
+}
+
 function pingable(){
-  ping -c ${retry} -w ${timeout} -q ${subnet}.${i} &> /dev/null && echo ${i} >> ${output}
+  runping &> /dev/null && echo ${i} >> ${output}
 }
 
 function unpingable(){
-  ping -c ${retry} -w ${timeout} -q ${subnet}.${i} &> /dev/null || echo ${i} >> ${output}
+  runping &> /dev/null || echo ${i} >> ${output} 
 }
 
 # get the check type
@@ -58,5 +68,5 @@ wait
 
 # print output with better order
 sum=$(wc -l ${output} |awk '{print $1}')
-echo "There are \"${sum}\" \"${status}\" ips begin with \"${subnet}.\" :"
-cat ${output} | sort -t"." -k1,1n -k2,2n -k3,3n -k4,4n | xargs -n 20 echo " "
+echo "There are '${sum}' '${status}' ips begin with '${subnet}.' :"
+cat ${output} |sort |xargs -n 20 echo " "
