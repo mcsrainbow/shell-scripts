@@ -156,7 +156,7 @@ function del_exception(){
     if [ $? -ne 0 ]; then
       echo "SmartRoutes Exception is already OFF"
     else
-      echo -n "Adding the routes..."
+      echo -n "Deleting the routes..."
       for subnet_exception in ${subnet_exceptions[@]}
       do
         route delete ${subnet_exception} > /dev/null
