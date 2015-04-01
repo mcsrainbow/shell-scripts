@@ -39,7 +39,8 @@ function check_size(){
 }
 
 function update_data(){
-  wget ${apnic_data_url} -O ${apnic_data}
+  echo "Downloading the latest apnic_data: ${apnic_data}..."
+  wget ${apnic_data_url} -q -O ${apnic_data}
 }
 
 function check_status(){
