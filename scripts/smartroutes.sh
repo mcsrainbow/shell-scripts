@@ -39,7 +39,7 @@ function check_size(){
 }
 
 function update_data(){
-  echo -n "Downloading the latest apnic data: ${apnic_data}..."
+  echo -n "Downloading the latest APNIC data: ${apnic_data}..."
 
   wget ${apnic_data_url} -q -O ${apnic_data}
   if [ $? -eq 0 ]; then
