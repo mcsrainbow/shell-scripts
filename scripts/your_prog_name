@@ -8,17 +8,18 @@
 prog_name="your_prog_name"
 prog_path="/path/to/${prog_name}"
 prog_user="your_prog_user"
+prog_conf="/path/to/your_prog_conf"
 pidfile="/path/to/${prog_name}.pid"
-options="-c your_conf_file"
+options="-c ${prog_conf}"
 
 lockfile="/var/lock/subsys/${prog_name}"
 
 [ -x "${prog_path}" ] || exit 1
-[ -r "${your_conf_file}" ] || exit 1
+[ -r "${prog_conf}" ] || exit 1
 
 start(){
   echo -n $"Starting ${prog_name}: "
-  daemon --user ${your_prog_user} ${prog_path} ${options}
+  daemon --user ${prog_user} ${prog_path} ${options}
   retval=$?
   prog_pid=$(pidof ${prog_path})
   [ ! -z "${prog_pid}" ] && echo ${prog_pid} > ${pidfile}
