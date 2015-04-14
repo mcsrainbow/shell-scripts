@@ -3,10 +3,8 @@
 # chkconfig: - 98 02
 # description: Starts and stops the your_prog_name daemon.
 
-# Source function library.
 . /etc/init.d/functions
 
-# Default variables
 prog_name="your_prog_name"
 prog_path="/path/to/${prog_name}"
 prog_user="your_prog_user"
@@ -15,7 +13,6 @@ options="-c your_conf_file"
 
 lockfile="/var/lock/subsys/${prog_name}"
 
-# Check if requirements are met
 [ -x "${prog_path}" ] || exit 1
 [ -r "${your_conf_file}" ] || exit 1
 
