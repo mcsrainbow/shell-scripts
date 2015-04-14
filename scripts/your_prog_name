@@ -37,11 +37,6 @@ stop(){
   return $retval
 }
 
-restart() {
-  stop
-  start
-}
-
 case "$1" in
   start)
     start
@@ -50,7 +45,9 @@ case "$1" in
     stop
     ;;
   restart)
-    restart
+    stop
+    sleep 1
+    start
     ;;
   status)
     status -p ${pidfile} ${prog_name}
