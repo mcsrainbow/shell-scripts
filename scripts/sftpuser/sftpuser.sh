@@ -67,11 +67,11 @@ function check_user_disabled(){
 
 function update_sshkey(){
   #Get the sshkey
-  echo -n "Input sshkey: "
+  echo -n "Input ssh public key: "
   read sshkey
   #Check if sshkey is empty
   if [ -z "$sshkey" ];then
-    echo "Empty sshkey." && exit
+    echo "Empty ssh public key." && exit
   fi
   #Check if sshkey not correct
   echo $sshkey | grep -Ewq '^ssh-rsa|^ssh-dss'
@@ -99,7 +99,7 @@ case "$1" in
     check_username_exist
     useradd -m -d "$homedir/$username" -g $groupname -s $loginshell -c "$username sftp" $username
     chmod 755 $homedir/$username
-    chown root:root $homedir/$username
+    chown $username:$groupname $homedir/$username
     if [ $? -eq 0 ]; then
       echo "User $username was created."
     fi
