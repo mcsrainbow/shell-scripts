@@ -23,7 +23,7 @@ function check_ha_status(){
 function get_excluded_datanodes(){
   for item in $(cat ${conf} | cut -d: -f1)
   do
-    excluded_datanodes="${excluded_datanodes} $(host ${item} |awk '{print $NF}' |awk -F '.drawbrid.ge.' '{print $1}')"
+    excluded_datanodes="${excluded_datanodes} $(host ${item} |awk '{print $NF}' |awk -F '.heylinux.com' '{print $1}')"
   done
   echo ${excluded_datanodes} |xargs -n 5 echo ' '
 }
