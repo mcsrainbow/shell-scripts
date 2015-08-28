@@ -12,9 +12,9 @@ Filter: active_checks_enabled = 0
 Filter: scheduled_downtime_depth = 0
 Filter: host_scheduled_downtime_depth = 0
 Filter: acknowledged = 0
-Filter: state = ${retval}" |unixcat  /var/spool/icinga/cmd/live\
-| awk '{print $1}' |sort | uniq -c\
-| awk '{print " "$1 " disk(s) on " $2}'| tr '\n' ';'
+Filter: state = ${retval}" |unixcat /var/spool/icinga/cmd/live\
+|awk '{print $1}' |sort |uniq -c\
+|awk '{print " "$1 " disk(s) on " $2}'|tr '\n' ';'
 }
 
 warn_msg="$(get_info 1)"
