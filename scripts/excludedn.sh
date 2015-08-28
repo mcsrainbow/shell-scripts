@@ -4,11 +4,10 @@
 
 conf=/etc/hadoop/conf/datanodes.exclude
 
-function check_ha_status()
-{
+function check_ha_status(){
   ha_status=$( hdfs haadmin -getServiceState ${1} )
-  if [ $? -ne 0 ]; then
-    echo "error running 'hdfs haadmin -getServiceState ${1}'"
+  if [[ $? -ne 0 ]]; then
+    echo "Error running 'hdfs haadmin -getServiceState ${1}'."
     exit 1
   fi
 
@@ -21,8 +20,7 @@ function check_ha_status()
   return
 }
 
-function get_excluded_datanodes()
-{
+function get_excluded_datanodes(){
   for item in $(cat ${conf} | cut -d: -f1)
   do
     excluded_datanodes="${excluded_datanodes} $(host ${item} |awk '{print $NF}' |awk -F '.drawbrid.ge.' '{print $1}')"
@@ -30,8 +28,7 @@ function get_excluded_datanodes()
   echo ${excluded_datanodes} |xargs -n 5 echo ' '
 }
 
-function usage
-{
+function usage(){
   echo "Please run as root on ${master}."
   echo ""
   echo "Usage:"
@@ -49,13 +46,13 @@ ha_status_a=( $( check_ha_status "idc1-hnn1" ) )
 ha_status_b=( $( check_ha_status "idc1-hnn2" ) )
 
 if [[ ${#ha_status_a[@]} -eq 0 || ${#ha_status_b[@]} -eq 0 ]]; then
-  echo "missing namenode(s), exiting"
+  echo "Missing namenode(s), exiting..."
   exit 1
 elif [[ "${ha_status_a[1]}" == "active" && "${ha_status_b[1]}" == "active" ]]; then
-  echo "both namenodes show active status, exiting"
+  echo "Both namenodes show active status, exiting..."
   exit 1
 elif [[ "${ha_status_a[1]}" == "standby" && "${ha_status_b[1]}" == "standby" ]]; then
-  echo "both namenodes show standby status, exiting"
+  echo "Both namenodes show standby status, exiting..."
   exit 1
 fi
 
@@ -67,8 +64,8 @@ else
   standby="${ha_status_a[0]}"
 fi
 
-[[ $(whoami) == "root" ]] || usage
-[[ $(hostname -s) == "${master}" ]] || usage
+[[ "$(whoami)" == "root" ]] || usage
+[[ "$(hostname -s)" == "${master}" ]] || usage
 do_remove="false"
 
 while getopts "hr:" option
@@ -87,10 +84,10 @@ do
   esac
 done
 
-if [ -z ${dn} ]; then
+if [[ -z "${dn}" ]]; then
   dn=${1}
 fi
-if [ -z ${dn} ]; then
+if [[ -z "${dn}" ]]; then
   usage
 fi
 
