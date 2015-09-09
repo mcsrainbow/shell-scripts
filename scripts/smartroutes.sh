@@ -169,9 +169,9 @@ function del_exception(){
 
 check_root
 check_data
-check_size
 case $1 in
   on)
+    check_size
     run_smartroutes
     ;;
   off)
