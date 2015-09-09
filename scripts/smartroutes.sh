@@ -39,7 +39,7 @@ function check_size(){
 }
 
 function update_data(){
-  echo -n "Downloading the latest APNIC data: ${apnic_data}..."
+  echo "Downloading the latest APNIC data as ${apnic_data}..."
 
   curl --progress-bar -o ${apnic_data} ${apnic_data_url}
   if [ $? -ne 0 ]; then
