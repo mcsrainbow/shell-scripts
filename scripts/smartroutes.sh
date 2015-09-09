@@ -41,11 +41,9 @@ function check_size(){
 function update_data(){
   echo -n "Downloading the latest APNIC data: ${apnic_data}..."
 
-  wget ${apnic_data_url} -q -O ${apnic_data}
-  if [ $? -eq 0 ]; then
-    echo " Done"
-  else
-    echo " Failed"
+  curl --progress-bar -o ${apnic_data} ${apnic_data_url}
+  if [ $? -ne 0 ]; then
+    exit 1
   fi
 }
 
