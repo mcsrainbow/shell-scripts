@@ -18,8 +18,9 @@ function check_root(){
 
 function print_help(){
   echo "Usage:"
-  echo "  ${0} {on|off}"
-  echo "  ${0} [force|exception] {on|off}"
+  echo "  ${0} {on|off|status}"
+  echo "  ${0} force {on|off}"
+  echo "  ${0} exception {on|off}"
 }
 
 function check_data(){
@@ -186,6 +187,9 @@ case $1 in
   off)
     del_smartroutes
     ;;
+  status)
+    check_status
+    ;;
   force)
     case $2 in
       on)
@@ -195,7 +199,6 @@ case $1 in
         del_routes
         ;;
       *)
-        check_status
         print_help
         ;;
     esac
@@ -209,13 +212,11 @@ case $1 in
         del_exception
         ;;
       *)
-        check_status
         print_help
         ;;
     esac
     ;;
   *)
-    check_status
     print_help
     ;;
 esac
