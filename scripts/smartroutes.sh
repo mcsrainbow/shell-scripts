@@ -4,7 +4,7 @@
 basedir=$(dirname $0)
 apnic_data_url="http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
 apnic_data="${basedir}/apnic.data"
-subnet_sign="1.0.1/24" # one subnet in apnic_data
+subnet_sign="1.0.1/24" # one CN subnet in apnic_data
 subnet_exceptions=(
 172.21.1.0/24
 66.102.255.51/32
