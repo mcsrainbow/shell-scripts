@@ -68,9 +68,9 @@ function check_status(){
   fi
 
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
+    subnet_exception_sign=$(format_subnet_netstat ${subnet_exceptions[0]})
 
-    netstat -rn |grep -Eq "^${subnet_exception_formatted}"
+    netstat -rn |grep -Eq "^${subnet_exception_sign}"
     if [[ $? -ne 0 ]]; then
       echo "SmartRoutes Exception is OFF"
     else
@@ -141,9 +141,9 @@ function format_subnet_netstat(){
 
 function add_exception(){
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
+    subnet_exception_sign=$(format_subnet_netstat ${subnet_exceptions[0]})
 
-    netstat -rn |grep -Eq "^${subnet_exception_formatted}"
+    netstat -rn |grep -Eq "^${subnet_exception_sign}"
     if [[ $? -ne 0 ]]; then
       oldgw=$(netstat -nr |grep '^default' |grep -v 'ppp' |sed 's/default *\([0-9\.]*\) .*/\1/' |grep -Ev '^$')
       dscacheutil -flushcache
@@ -161,9 +161,9 @@ function add_exception(){
 
 function del_exception(){
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
+    subnet_exception_sign=$(format_subnet_netstat ${subnet_exceptions[0]})
 
-    netstat -rn |grep -Eq "^${subnet_exception_formatted}"
+    netstat -rn |grep -Eq "^${subnet_exception_sign}"
     if [[ $? -ne 0 ]]; then
       echo "SmartRoutes Exception is already OFF"
     else
