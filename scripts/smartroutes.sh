@@ -4,11 +4,10 @@
 basedir=$(dirname $0)
 apnic_data_url="http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
 apnic_data="${basedir}/apnic.data"
-subnet_sign="1.0.1/24" # one CN subnet in apnic_data
 subnet_exceptions=(
 172.21.1.0/24
 66.102.255.51/32
-) # subnets not in apnic_data, just some examples, change/remove them
+) # subnets not in apnic_data CN section, just some examples, change/remove them
 
 function check_root(){
   if [[ $EUID -ne 0 ]]; then
@@ -27,6 +26,10 @@ function check_data(){
   if [[ ! -f ${apnic_data} ]]; then
     update_data
   fi
+
+  rawnet_sign=$(grep CN ${apnic_data} |grep ipv4 |head -n 1 |awk -F '|' '{print $4"/"$5}')
+  rawnet_sign_formatted=$(format_subnet ${rawnet_sign})
+  subnet_sign=$(format_subnet_netstat ${rawnet_sign_formatted})
 }
 
 function check_size(){
@@ -47,6 +50,15 @@ function update_data(){
   fi
 }
 
+function format_subnet(){
+  subnet=${1}
+  subneti=$(echo ${subnet} |cut -d/ -f1)
+  rawnetm=$(echo ${subnet} |cut -d/ -f2)
+  subnetm=$(awk -v c=${rawnetm} 'function log2(x){if(x<2)return(pow);pow--;return(log2(x/2))}BEGIN{pow=32;print log2(c)}')
+
+  echo ${subneti}/${subnetm}
+}
+
 function check_status(){
   netstat -rn |grep -Eq "^${subnet_sign}"
   if [[ $? -ne 0 ]]; then
@@ -56,7 +68,7 @@ function check_status(){
   fi
 
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
 
     netstat -rn |grep -Eq "^${subnet_exception_formatted}"
     if [[ $? -ne 0 ]]; then
@@ -74,10 +86,8 @@ function add_routes(){
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
   echo -n "Adding the routes..."
   for subnet in ${all_subs}; do
-    subneti=$(echo ${subnet} |cut -d/ -f1)
-    rawnetm=$(echo ${subnet} |cut -d/ -f2)
-    subnetm=$(awk -v c=${rawnetm} 'function log2(x){if(x<2)return(pow);pow--;return(log2(x/2))}BEGIN{pow=32;print log2(c)}')
-    route add ${subneti}/${subnetm} "${oldgw}" > /dev/null
+    subnet_formatted=$(format_subnet ${subnet})
+    route add ${subnet_formatted} "${oldgw}" > /dev/null
   done
   echo " Done"
 }
@@ -86,10 +96,8 @@ function del_routes(){
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
   echo -n "Deleting the routes..."
   for subnet in ${all_subs}; do
-    subneti=$(echo ${subnet} |cut -d/ -f1)
-    rawnetm=$(echo ${subnet} |cut -d/ -f2)
-    subnetm=$(awk -v c=${rawnetm} 'function log2(x){if(x<2)return(pow);pow--;return(log2(x/2))}BEGIN{pow=32;print log2(c)}')
-    route delete ${subneti}/${subnetm} > /dev/null
+    subnet_formatted=$(format_subnet ${subnet})
+    route delete ${subnet_formatted} > /dev/null
   done
   echo " Done"
 }
@@ -112,12 +120,13 @@ function del_smartroutes(){
   fi
 }
 
-function format_subnet(){
-  a=$(echo $1 |cut -d/ -f1 |cut -d. -f1)
-  b=$(echo $1 |cut -d/ -f1 |cut -d. -f2)
-  c=$(echo $1 |cut -d/ -f1 |cut -d. -f3)
-  d=$(echo $1 |cut -d/ -f1 |cut -d. -f4)
-  m=$(echo $1 |cut -d/ -f2)
+function format_subnet_netstat(){
+  subnet_exception=${1}
+  a=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f1)
+  b=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f2)
+  c=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f3)
+  d=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f4)
+  m=$(echo ${subnet_exception} |cut -d/ -f2)
 
   if [[ $m -gt 24 ]]; then
     echo "$a.$b.$c.$d/$m"
@@ -132,7 +141,7 @@ function format_subnet(){
 
 function add_exception(){
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
 
     netstat -rn |grep -Eq "^${subnet_exception_formatted}"
     if [[ $? -ne 0 ]]; then
@@ -152,7 +161,7 @@ function add_exception(){
 
 function del_exception(){
   if [[ ! -z "${subnet_exceptions[0]}" ]]; then
-    subnet_exception_formatted=$(format_subnet ${subnet_exceptions[0]})
+    subnet_exception_formatted=$(format_subnet_netstat ${subnet_exceptions[0]})
 
     netstat -rn |grep -Eq "^${subnet_exception_formatted}"
     if [[ $? -ne 0 ]]; then
