@@ -51,7 +51,7 @@ function update_data(){
 }
 
 function format_subnet(){
-  subnet=${1}
+  local subnet=${1}
   subneti=$(echo ${subnet} |cut -d/ -f1)
   rawnetm=$(echo ${subnet} |cut -d/ -f2)
   subnetm=$(awk -v c=${rawnetm} 'function log2(x){if(x<2)return(pow);pow--;return(log2(x/2))}BEGIN{pow=32;print log2(c)}')
@@ -121,12 +121,12 @@ function del_smartroutes(){
 }
 
 function format_subnet_netstat(){
-  subnet_exception=${1}
-  a=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f1)
-  b=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f2)
-  c=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f3)
-  d=$(echo ${subnet_exception} |cut -d/ -f1 |cut -d. -f4)
-  m=$(echo ${subnet_exception} |cut -d/ -f2)
+  local subnet=${1}
+  a=$(echo ${subnet} |cut -d/ -f1 |cut -d. -f1)
+  b=$(echo ${subnet} |cut -d/ -f1 |cut -d. -f2)
+  c=$(echo ${subnet} |cut -d/ -f1 |cut -d. -f3)
+  d=$(echo ${subnet} |cut -d/ -f1 |cut -d. -f4)
+  m=$(echo ${subnet} |cut -d/ -f2)
 
   if [[ $m -gt 24 ]]; then
     echo "$a.$b.$c.$d/$m"
