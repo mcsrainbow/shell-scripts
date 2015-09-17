@@ -162,7 +162,7 @@ function del_exception(){
       for subnet_exception in ${subnet_exceptions[@]}; do
         route delete ${subnet_exception} > /dev/null
       done
-    echo " Done"
+      echo " Done"
     fi
   fi
 }
