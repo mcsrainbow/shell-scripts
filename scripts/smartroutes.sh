@@ -19,8 +19,7 @@ function check_root(){
 function print_help(){
   echo "Usage:"
   echo "  ${0} {on|off|status}"
-  echo "  ${0} force {on|off}"
-  echo "  ${0} exception {on|off}"
+  echo "  ${0} [force|exception] {on|off}"
 }
 
 function check_data(){
