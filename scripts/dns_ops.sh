@@ -144,7 +144,7 @@ else
       else
         domain=$c.$b.$a.in-addr.arpa
         servername=$d
-        if [ ! -f ${base_dir}/${domain}.zone ]; then
+        if [[ ! -f ${base_dir}/${domain}.zone ]]; then
           echo ${base_dir}/${domain}.zone does not exist
           exit 1 
         else
