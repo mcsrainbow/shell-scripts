@@ -87,8 +87,7 @@ function update_record(){
 }
 
 check_root
-while getopts "t:u:n:v:" opts
-do
+while getopts "t:u:n:v:" opts; do
   case "$opts" in
     "t")
       record_type=$OPTARG
