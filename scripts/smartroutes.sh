@@ -84,7 +84,7 @@ function add_routes(){
   dscacheutil -flushcache
 
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
-  echo -n "Adding the routes..."
+  echo -n "Adding the routes, this may take several minutes to complete..."
   for subnet in ${all_subs}; do
     subnet_formatted=$(format_subnet ${subnet})
     route add ${subnet_formatted} "${oldgw}" > /dev/null
@@ -94,7 +94,7 @@ function add_routes(){
 
 function del_routes(){
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
-  echo -n "Deleting the routes..."
+  echo -n "Deleting the routes, this may take several minutes to complete..."
   for subnet in ${all_subs}; do
     subnet_formatted=$(format_subnet ${subnet})
     route delete ${subnet_formatted} > /dev/null
