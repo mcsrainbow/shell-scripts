@@ -84,22 +84,36 @@ function add_routes(){
   dscacheutil -flushcache
 
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
-  echo -n "Adding the routes, this may take several minutes to complete..."
+  sum_subs=$(grep CN ${apnic_data} |grep ipv4 |wc -l |awk '{print $NF}')
+  local pos_subs=0
   for subnet in ${all_subs}; do
     subnet_formatted=$(format_subnet ${subnet})
     route add ${subnet_formatted} "${oldgw}" > /dev/null
+    let pos_subs+=1
+    if [[ ${pos_subs} -eq ${sum_subs} ]]; then
+      echo -ne "Adding the routes..."
+    else
+      echo -ne "Adding the routes... ${pos_subs}/${sum_subs}\033[0K\r"
+    fi
   done
-  echo " Done"
+  echo " Done       " # more blank spaces added to cover all previous output 
 }
 
 function del_routes(){
   all_subs=$(grep CN ${apnic_data} |grep ipv4 |awk -F '|' '{print $4"/"$5}')
-  echo -n "Deleting the routes, this may take several minutes to complete..."
+  sum_subs=$(grep CN ${apnic_data} |grep ipv4 |wc -l |awk '{print $NF}')
+  local pos_subs=0
   for subnet in ${all_subs}; do
     subnet_formatted=$(format_subnet ${subnet})
     route delete ${subnet_formatted} > /dev/null
+    let pos_subs+=1
+    if [[ ${pos_subs} -eq ${sum_subs} ]]; then
+      echo -ne "Deleting the routes..."
+    else
+      echo -ne "Deleting the routes... ${pos_subs}/${sum_subs}\033[0K\r"
+    fi
   done
-  echo " Done"
+  echo " Done       " # more blank spaces added to cover all previous output 
 }
 
 function run_smartroutes(){
@@ -134,7 +148,7 @@ function format_subnet_netstat(){
     echo "$a.$b.$c/$m"
   elif [[ $m -le 16 ]] && [[ $m -gt 8 ]]; then
     echo "$a.$b/$m"
-  elif [[ $m -eq 8 ]]; then
+  elif [[ $m -le 8 ]]; then
     echo "$a/$m"
   fi
 }
