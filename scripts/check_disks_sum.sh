@@ -1,6 +1,7 @@
-#!/bin/bash 
-# This script checks all alerts for check_mk-df on Check_MK
-# Then summarise the output
+#!/bin/bash
+#
+# This script checks all alerts for check_mk-df on Check_MK,
+# then summarises the output.
 
 function get_info(){
   retval=$1
