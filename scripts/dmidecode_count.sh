@@ -10,7 +10,7 @@ for i in ${ram_all}
 do 
   if $(echo $i |grep -q 'x'); then
     result="$result$i"
-  elif $(echo $i |grep -q 'B' ); then
+  elif $(echo $i |grep -q 'B'); then
     result="$result $i, "
   else
     result="$result$i"
