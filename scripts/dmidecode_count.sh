@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Output examples: idc1-server1, X8STi, 1x4096 kB, 2x4096 MB, 4xNo Module Installed
+# Output example: idc1-server1, X8STi, 1x4096 kB, 2x4096 MB, 4xNo Module Installed
 
 hostname=$(hostname -s)
 motherboard=$(dmidecode |grep "Product Name" |awk -F ': ' '{print $2}' |uniq |xargs)
