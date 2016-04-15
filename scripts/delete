@@ -4,8 +4,8 @@ trash_dir=${HOME}/.Trash/$(date +%Y%m%d%H%M%S)
 mkdir -p ${trash_dir}
 
 for item in $@; do
-  if $(echo ${item} |grep -Evq "^\-|^\-\-"); then
-    if $(echo ${item} |grep -Eq "^/"); then
+  if $(echo ${item} |grep -vq '^-'); then
+    if $(echo ${item} |grep -q '^/'); then
       full_path=${item}
     else
       full_path=$(pwd)/${item}
