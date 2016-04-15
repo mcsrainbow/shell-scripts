@@ -5,7 +5,11 @@ mkdir -p ${trash_dir}
 
 for item in $@; do
   if $(echo ${item} |grep -Evq "^\-|^\-\-"); then
-    full_path=$(readlink -f ${item})
+    if $(echo ${item} |grep -Eq "^/"); then
+      full_path=${item}
+    else
+      full_path=$(pwd)/${item}
+    fi
     full_dir=$(dirname ${full_path})
     mkdir -p ${trash_dir}${full_dir}
     echo -n "Moving ${item} to ${trash_dir}${full_path}..."
