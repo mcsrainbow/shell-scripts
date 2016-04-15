@@ -1,0 +1,14 @@
+#!/bin/bash
+
+trash_dir=${HOME}/.Trash/$(date +%Y%m%d%H%M%S)
+mkdir -p ${trash_dir}
+
+for file in $@; do
+  full_path=$(readlink -f ${file})
+  full_dir=$(dirname ${full_path})
+
+  mkdir -p ${trash_dir}${full_dir}
+
+  echo "Moving ${file} to ${trash_dir}${full_path}..."
+  mv ${file} ${trash_dir}${full_path}
+done
