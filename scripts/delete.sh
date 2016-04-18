@@ -8,7 +8,7 @@ function move_item(){
   mkdir -p ${trash_dir}${full_dir}
   mv ${item} ${trash_dir}${full_path}
   if [[ $? -eq 0 ]]; then
-    echo "Moved ${item} to ${trash_dir}${full_path}."
+    echo "Moved ${item} to ${trash_dir}${full_path}"
   fi
 }
  
