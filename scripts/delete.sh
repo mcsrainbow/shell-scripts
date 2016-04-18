@@ -11,6 +11,11 @@ function move_item(){
   fi
 }
  
+if [[ $# -eq 0 ]] || $(echo "$1" |grep -Ewq '\-h|\-\-help'); then
+  echo "${0} [-f] [*|FILE]"
+  exit 2
+fi
+ 
 for item in $@; do
   if $(echo ${item} |grep -vq '^-'); then
     if $(echo ${item} |grep -q '^/'); then
@@ -19,12 +24,12 @@ for item in $@; do
       full_path=$(pwd)/${item}
     fi
     full_dir=$(dirname ${full_path})
-    if $(echo $@ |grep -Ewq '\-rf|\-f|\-fr'); then
+    if $(echo $@ |grep -Ewq '\-f|\-rf|\-fr'); then
       move_item
     else
       echo -n "Move ${item} to ${trash_dir}${full_path}? [y/n] "
       read yorn
-      if $(echo ${yorn} |grep -Ewq 'y|Y|yes|YES'); then
+      if $(echo ${yorn} |grep -Eq 'y|Y|yes|YES'); then
         move_item
       fi
     fi
