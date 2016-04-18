@@ -19,7 +19,7 @@ for item in $@; do
       full_path=$(pwd)/${item}
     fi
     full_dir=$(dirname ${full_path})
-    if $(echo $@ |grep -Eq '^-rf|^-f|-fr'); then
+    if $(echo $@ |grep -Ewq '\-rf|\-f|\-fr'); then
       move_item
     else
       echo -n "Move ${item} to ${trash_dir}${full_path}? [y/n] "
