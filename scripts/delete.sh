@@ -3,7 +3,8 @@
 trash_dir=${HOME}/.Trash/$(date +%Y%m%d%H%M%S)
  
 function move_item(){
-  full_path=$1
+  item=$1
+  full_path=$2
   full_dir=$(dirname ${full_path})
   mkdir -p ${trash_dir}${full_dir}
   mv ${item} ${trash_dir}${full_path}
@@ -25,12 +26,12 @@ for item in $@; do
       full_path=$(pwd)/${item}
     fi
     if $(echo $@ |grep -Ewq '\-f|\-rf|\-fr'); then
-      move_item ${full_path}
+      move_item ${item} ${full_path}
     else
       echo -n "Move ${item} to ${trash_dir}${full_path}? [y/n] "
       read yorn
       if $(echo ${yorn} |grep -Eq 'y|Y|yes|YES'); then
-        move_item ${full_path}
+        move_item ${item} ${full_path}
       fi
     fi
   fi
