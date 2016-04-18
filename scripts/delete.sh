@@ -24,7 +24,7 @@ for item in $@; do
     else
       echo -n "Move ${item} to ${trash_dir}${full_path}? [y/n] "
       read yorn
-      if $(echo ${yorn} |grep -Eq 'y|Y|yes|YES'); then
+      if $(echo ${yorn} |grep -Ewq 'y|Y|yes|YES'); then
         move_item
       fi
     fi
