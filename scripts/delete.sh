@@ -6,10 +6,9 @@ function move_item(){
   full_dir=$1
   full_path=$2
   mkdir -p ${trash_dir}${full_dir}
-  echo -n "Moving ${item} to ${trash_dir}${full_path}..."
   mv ${item} ${trash_dir}${full_path}
   if [[ $? -eq 0 ]]; then
-    echo " Done"
+    echo "Moved ${item} to ${trash_dir}${full_path}."
   fi
 }
  
