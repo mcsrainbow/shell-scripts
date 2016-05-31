@@ -4,7 +4,7 @@
 #
 # Example:
 #   ------------------------------------
-#   extra options: ./MegaRAID_SUM --help
+#   Extra options: ./MegaRAID_SUM --help
 #   ------------------------------------
 #   
 #                   Device Present
@@ -96,12 +96,12 @@ Replace_failed(){
       else
         continue
       fi
-
-      # temp file clean-up
-      rm -f Cfgdsply-text
-      rm -f Cfgdsply-tofailed-text
-      rm -f backw-Cfgdsplytext
     done
+
+    # temp file clean-up
+    rm -f Cfgdsply-text
+    rm -f Cfgdsply-tofailed-text
+    rm -f backw-Cfgdsplytext
 
   else
     echo "No Failed drives"
@@ -142,12 +142,12 @@ Show_failed(){
       else
         continue
       fi
-
-      # temp file clean-up
-      rm -f Cfgdsply-text
-      rm -f Cfgdsply-tofailed-text
-      rm -f backw-Cfgdsplytext
     done
+
+    # temp file clean-up
+    rm -f Cfgdsply-text
+    rm -f Cfgdsply-tofailed-text
+    rm -f backw-Cfgdsplytext
 
   else
     echo "No Failed drives"
