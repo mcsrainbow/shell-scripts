@@ -158,8 +158,7 @@ if [ $# -eq 0 ]; then
   
   for (( i = 0;  i < ${#VIRTdrives[@]}; i++))
   do
-    echo "${VIRTdrives[$i]} | RAIDlvl: ${RAIDlvl[$i]} | #Drives:${drivenum[$i]} | State:${RAIDstate[$i]}"
-    echo "                    Span Ref: ${SPANref[$i]} | Size:${RAIDsize[$i]}"
+    echo "${VIRTdrives[$i]} | RAIDlvl: ${RAIDlvl[$i]} | #Drives:${drivenum[$i]} | State:${RAIDstate[$i]} | Span Ref: ${SPANref[$i]} | Size:${RAIDsize[$i]}"
   done
   
   mapfile -t slotnum < <(cat Pdlist-text | /bin/grep 'Slot Number'| cut -d':' -f2 | cut -c2-3)
