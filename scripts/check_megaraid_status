@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# Script to check MegaRaidCLI Critical/failed drives
+# Works on servers with ONE RAID controller
+#
+# Example:
+#   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Failed: 2}, \
+#          Bad Drive: {adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0},{adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}
+
+OK_STATE=0
+WARN_STATE=1
+CRIT_STATE=2
+
+megacli="sudo /opt/MegaRAID/MegaCli/MegaCli64"
+
+anyissue=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
+degrade=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade'|awk '/[0-9]/ {print $3}')
+offline=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Offline'|awk '/[0-9]/ {print $3}')
+failed=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Failed'|awk '/[0-9]/ {print $4}')
+
+if [[ ${anyissue} -ge 1 ]]; then
+ ${megacli} -CfgDsply -aALL > /tmp/Cfgdsply.txt
+ mapfile -t failed_line < <( /bin/egrep -n "Failed" /tmp/Cfgdsply.txt | cut -d':' -f1 )
+
+ for (( i = 0; i < ${#failed_line[@]}; i++ ))
+ do
+   sed -n "1,${failed_line[$i]}p" /tmp/Cfgdsply.txt > /tmp/Cfgdsply_tofailed.txt
+   tac /tmp/Cfgdsply_tofailed.txt > /tmp/backw_Cfgdsply.txt
+
+   fadpt=$(/bin/egrep -m 1 "Adapter" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   enclID=$(/bin/egrep -m 1 "Enclosure Device ID" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" )
+   slot=$(/bin/egrep -m 1 "Slot Number" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   spanref=$( /bin/egrep -m 1 "Span Reference" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
+   row=$(/bin/egrep -m 1 "Physical Disk:" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+
+   bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"},${bad_drives_info}"
+ done
+   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drive: ${bad_drives_info}"
+
+   # clean up temp files
+   rm -f /tmp/Cfgdsply.txt
+   rm -f /tmp/Cfgdsply_tofailed.txt
+   rm -f /tmp/backw_Cfgdsply.txt
+   rm -f MegaSAS.log*
+   rm -f nohup.out*
+   rm -f CmdTool.log*
+
+   exit $CRIT_STATE
+else
+   echo "OK - No disk issue. Virtual Drives: { Degraded: "$degrade", Offline: "$offline" }, Physical Disks: {Failed: "$failed"}"
+
+   # clean up temp files
+   rm -f MegaSAS.log*
+   rm -f nohup.out*
+   rm -f CmdTool.log*
+
+   exit $OK_STATE
+fi
