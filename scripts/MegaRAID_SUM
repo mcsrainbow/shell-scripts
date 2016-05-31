@@ -167,7 +167,7 @@ if [ $# -eq 0 ]; then
   echo
   for (( i = 0; i < ${#slotnum[@]}; i++))
   do
-    echo "Slot: ${slotnum[$i]} -${position[$i]}-${firmstate[$i]} "
+    echo "Slot: ${slotnum[$i]} - ${position[$i]} - ${firmstate[$i]}"
   done
   
   # Clean up temp files
