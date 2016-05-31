@@ -2,6 +2,57 @@
 #
 # Script to check MegaRaidCLI status and Critical/failed drives
 #
+# Example:
+#   ------------------------------------
+#   extra options: ./MegaRAID_SUM --help
+#   ------------------------------------
+#   
+#                   Device Present
+#                   ================
+#   Virtual Drives    : 16
+#     Degraded        : 0
+#     Offline         : 2
+#   Physical Devices  : 19
+#     Disks           : 17
+#     Critical Disks  : 0
+#     Failed Disks    : 2
+#   
+#   
+#   Virtual Drive: 0  | RAIDlvl: 1 | #Drives: 2 | State: Optimal | Span Ref: 00 | Size: 278.0 GB
+#   Virtual Drive: 1  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 01 | Size: 2.727 TB
+#   Virtual Drive: 2  | RAIDlvl: 0 | #Drives: 1 | State: Offline | Span Ref: 02 | Size: 2.727 TB
+#   Virtual Drive: 3  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 03 | Size: 2.727 TB
+#   Virtual Drive: 4  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 04 | Size: 2.727 TB
+#   Virtual Drive: 5  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 05 | Size: 2.727 TB
+#   Virtual Drive: 6  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 06 | Size: 2.727 TB
+#   Virtual Drive: 7  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 07 | Size: 2.727 TB
+#   Virtual Drive: 8  | RAIDlvl: 0 | #Drives: 1 | State: Offline | Span Ref: 08 | Size: 3.637 TB
+#   Virtual Drive: 9  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 09 | Size: 2.727 TB
+#   Virtual Drive: 10  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0a | Size: 2.727 TB
+#   Virtual Drive: 16  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0b | Size: 2.727 TB
+#   Virtual Drive: 11  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0c | Size: 3.637 TB
+#   Virtual Drive: 12  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0d | Size: 3.637 TB
+#   Virtual Drive: 14  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0e | Size: 3.637 TB
+#   Virtual Drive: 15  | RAIDlvl: 0 | #Drives: 1 | State: Optimal | Span Ref: 0f | Size: 2.727 TB
+#   
+#   Slot: 0 - Drive's position: DiskGroup: 1, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 1 - Drive's position: DiskGroup: 2, Span: 0, Arm: 0 -  Failed
+#   Slot: 2 - Drive's position: DiskGroup: 3, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 3 - Drive's position: DiskGroup: 4, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 4 - Drive's position: DiskGroup: 5, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 5 - Drive's position: DiskGroup: 6, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 6 - Drive's position: DiskGroup: 7, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 7 - Drive's position: DiskGroup: 8, Span: 0, Arm: 0 -  Failed
+#   Slot: 8 - Drive's position: DiskGroup: 9, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 9 - Drive's position: DiskGroup: 10, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 10 - Drive's position: DiskGroup: 12, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 11 - Drive's position: DiskGroup: 13, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 13 - Drive's position: DiskGroup: 14, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 14 - Drive's position: DiskGroup: 15, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 15 - Drive's position: DiskGroup: 11, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 0 - Drive's position: DiskGroup: 0, Span: 0, Arm: 0 -  Online, Spun Up
+#   Slot: 1 - Drive's position: DiskGroup: 0, Span: 0, Arm: 1 -  Online, Spun Up
+#
 
 Replace_failed(){
   faild=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -PDList -aALL | /bin/egrep "Failed" | wc -l)
