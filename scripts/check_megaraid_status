@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to check MegaRaidCLI Critical/failed drives
+# Script to check MegaRaidCLI Failed drives
 # Works on servers with ONE RAID controller
 #
 # Example:
@@ -14,6 +14,7 @@ megacli="sudo /opt/MegaRAID/MegaCli/MegaCli64"
 
 anyissue=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
 degrade=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade' | awk '/[0-9]/ {print $3}')
+critical=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Critical'|awk '/[0-9]/ {print $4}')
 offline=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
 failed=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
 
@@ -39,7 +40,7 @@ if [[ ${anyissue} -ge 1 ]]; then
    fi
 
  done
-   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drives: [${bad_drives_info}]"
+   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Critical: "$critical", Failed: "$failed"}, Bad Drives: [${bad_drives_info}]"
 
    # clean up temp files
    rm -f /tmp/Cfgdsply.txt
