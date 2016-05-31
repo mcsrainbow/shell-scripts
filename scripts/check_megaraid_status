@@ -4,7 +4,8 @@
 # Works on servers with ONE RAID controller
 #
 # Example:
-#   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Failed: 2}, Bad Drives: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
+#   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Critical: 0, Failed: 2}, 
+#   Bad Drives: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
 
 OK_STATE=0
 WARN_STATE=1
