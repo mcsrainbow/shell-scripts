@@ -27,7 +27,7 @@ if [[ ${anyissue} -ge 1 ]]; then
    tac /tmp/Cfgdsply_tofailed.txt > /tmp/backw_Cfgdsply.txt
 
    fadpt=$(/bin/egrep -m 1 "Adapter" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
-   enclID=$(/bin/egrep -m 1 "Enclosure Device ID" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" )
+   enclID=$(/bin/egrep -m 1 "Enclosure Device ID" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
    slot=$(/bin/egrep -m 1 "Slot Number" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
    spanref=$( /bin/egrep -m 1 "Span Reference" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
    row=$(/bin/egrep -m 1 "Physical Disk:" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
