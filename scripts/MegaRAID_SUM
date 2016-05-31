@@ -133,7 +133,7 @@ esac
 
 if [ $# -eq 0 ]; then
   echo "------------------------------------"
-  echo "extra options: ${0} --help"
+  echo "Extra options: ${0} --help"
   echo "------------------------------------"
   echo
   
