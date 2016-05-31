@@ -5,7 +5,7 @@
 #
 # Example:
 #   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Failed: 2}, \
-#          Bad Drive: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
+#          Bad Drives: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
 
 OK_STATE=0
 WARN_STATE=1
@@ -40,14 +40,13 @@ if [[ ${anyissue} -ge 1 ]]; then
    fi
 
  done
-   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drive: [${bad_drives_info}]"
+   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drives: [${bad_drives_info}]"
 
    # clean up temp files
    rm -f /tmp/Cfgdsply.txt
    rm -f /tmp/Cfgdsply_tofailed.txt
    rm -f /tmp/backw_Cfgdsply.txt
    rm -f MegaSAS.log*
-   rm -f nohup.out*
    rm -f CmdTool.log*
 
    exit $CRIT_STATE
@@ -56,7 +55,6 @@ else
 
    # clean up temp files
    rm -f MegaSAS.log*
-   rm -f nohup.out*
    rm -f CmdTool.log*
 
    exit $OK_STATE
