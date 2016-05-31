@@ -11,16 +11,14 @@ OK_STATE=0
 WARN_STATE=1
 CRIT_STATE=2
 
-megacli="sudo /opt/MegaRAID/MegaCli/MegaCli64"
-
-anyissue=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
-degrade=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Degrade' | awk '/[0-9]/ {print $3}')
-critical=$(${megacli} -AdpAllInfo -aAll | /bin/egrep 'Critical'|awk '/[0-9]/ {print $4}')
-offline=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
-failed=$(${megacli} -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
+anyissue=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
+degrade=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Degrade' | awk '/[0-9]/ {print $3}')
+critical=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Critical' | awk '/[0-9]/ {print $4}')
+offline=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
+failed=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
 
 if [[ ${anyissue} -ge 1 ]]; then
- ${megacli} -CfgDsply -aALL > /tmp/Cfgdsply.txt
+ sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL > /tmp/Cfgdsply.txt
  mapfile -t failed_line < <( /bin/egrep -n "Failed" /tmp/Cfgdsply.txt | cut -d':' -f1 )
 
  for (( i = 0; i < ${#failed_line[@]}; i++ ))
