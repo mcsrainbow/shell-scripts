@@ -65,11 +65,11 @@ Replace_failed(){
     do
       sed -n "1,${failed_line[$i]}p" Cfgdsply-text > Cfgdsply-tofailed-text
       tac Cfgdsply-tofailed-text > backw-Cfgdsplytext
-      fadpt=$( /bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
-      enclID=$( /bin/egrep -m 1 "Enclosure Device ID" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" )
-      slot=$( /bin/egrep -m 1 "Slot Number" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
-      spanref=$( /bin/egrep -m 1 "Span Reference" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
-      row=$( /bin/egrep -m 1 "Physical Disk:" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      fadpt=$(/bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      enclID=$(/bin/egrep -m 1 "Enclosure Device ID" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" )
+      slot=$(/bin/egrep -m 1 "Slot Number" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      spanref=$(/bin/egrep -m 1 "Span Reference" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
+      row=$(/bin/egrep -m 1 "Physical Disk:" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
  
       echo "Replace Drive at: adapter: # $fadpt - enclID: $enclID - slot: $slot | Span ref: $spanref | Row: $row ??"
       echo "(yes) or (no)"
@@ -119,11 +119,11 @@ Show_failed(){
     do
       sed -n "1,${failed_line[$i]}p" Cfgdsply-text > Cfgdsply-tofailed-text
       tac Cfgdsply-tofailed-text > backw-Cfgdsplytext
-      fadpt=$( /bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
-      enclID=$( /bin/egrep -m 1 "Enclosure Device ID" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" )
-      slot=$( /bin/egrep -m 1 "Slot Number" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
-      spanref=$( /bin/egrep -m 1 "Span Reference" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
-      row=$( /bin/egrep -m 1 "Physical Disk:" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      fadpt=$(/bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      enclID=$(/bin/egrep -m 1 "Enclosure Device ID" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" )
+      slot=$(/bin/egrep -m 1 "Slot Number" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
+      spanref=$(/bin/egrep -m 1 "Span Reference" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
+      row=$(/bin/egrep -m 1 "Physical Disk:" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
 
       echo "Failed at:"
       echo "   adapter: # $fadpt - enclID: $enclID - slot: $slot | Span ref: $spanref | Row: $row"
