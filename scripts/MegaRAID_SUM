@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Script to check MegaRaidCLI status and Critical/failed drives
+# Script to check MegaRaidCLI status and Critical/Failed drives
 #
 # Example:
 #   ------------------------------------
