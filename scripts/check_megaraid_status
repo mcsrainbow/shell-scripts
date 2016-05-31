@@ -5,7 +5,7 @@
 #
 # Example:
 #   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Failed: 2}, \
-#          Bad Drive: {adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0},{adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}
+#          Bad Drive: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
 
 OK_STATE=0
 WARN_STATE=1
@@ -33,9 +33,14 @@ if [[ ${anyissue} -ge 1 ]]; then
    spanref=$( /bin/egrep -m 1 "Span Reference" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
    row=$(/bin/egrep -m 1 "Physical Disk:" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
 
-   bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"}, ${bad_drives_info}"
+   if [[ -z "${bad_drives_info}" ]]; then
+     bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"}"
+   else
+     bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"}, ${bad_drives_info}"
+   fi
+
  done
-   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drive: {${bad_drives_info}}"
+   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Failed: "$failed"}, Bad Drive: [${bad_drives_info}]"
 
    # clean up temp files
    rm -f /tmp/Cfgdsply.txt
