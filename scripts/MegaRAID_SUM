@@ -192,10 +192,10 @@ if [ $# -eq 0 ]; then
   sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL > Cfgdsply-text
   sudo /opt/MegaRAID/MegaCli/MegaCli64 -PDList -aALL > Pdlist-text
   
-  degrade=$(cat Adpallinfo-text | /bin/egrep 'Degrade'|awk '/[0-9]/ {print $3}')
-  offline=$(cat Adpallinfo-text | /bin/egrep '[[:space:]][[:space:]]Offline'|awk '/[0-9]/ {print $3}')
-  critical=$(cat Adpallinfo-text | /bin/egrep 'Critical'|awk '/[0-9]/ {print $4}')
-  failed=$(cat Adpallinfo-text | /bin/egrep '[[:space:]][[:space:]]Failed'|awk '/[0-9]/ {print $4}')
+  degrade=$(cat Adpallinfo-text | /bin/egrep 'Degrade' | awk '/[0-9]/ {print $3}')
+  offline=$(cat Adpallinfo-text | /bin/egrep '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
+  critical=$(cat Adpallinfo-text | /bin/egrep 'Critical' | awk '/[0-9]/ {print $4}')
+  failed=$(cat Adpallinfo-text | /bin/egrep '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
   
   mapfile -t VIRTdrives < <(cat Cfgdsply-text | /bin/egrep 'Virtual Drive:'| cut -d'(' -f1)
   mapfile -t RAIDlvl < <(cat Cfgdsply-text | /bin/egrep 'RAID Level' | awk ' {print $4}'| cut -d'-' -f2 | cut -c1)
