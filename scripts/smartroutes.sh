@@ -194,11 +194,13 @@ check_root
 check_data
 case $1 in
   on)
-    check_size
     run_smartroutes
     ;;
   off)
     del_smartroutes
+    ;;
+  update)
+    check_size
     ;;
   status)
     check_status
