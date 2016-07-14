@@ -38,6 +38,8 @@ function check_size(){
 
   if [[ "${apnic_data_size}" != "${apnic_data_size_local}" ]]; then
     update_data
+  else
+    echo "The APNIC data file is up-to-date"
   fi
 }
 
