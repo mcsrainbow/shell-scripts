@@ -7,9 +7,10 @@
 #   CRIT - Virtual Drives: {Degraded: 0, Offline: 2}, Physical Disks: {Critical: 0, Failed: 2}, 
 #   Bad Drives: [{adapter: 0, enclID: 2, slot: 7, Span ref: 8, Row: 0}, {adapter: 0, enclID: 2, slot: 1, Span ref: 2, Row: 0}]
 
-OK_STATE=0
-WARN_STATE=1
-CRIT_STATE=2
+if $(grep -Eq 'flags.*hypervisor' /proc/cpuinfo); then
+  echo "OK. This is a virtual machine"
+  exit 0
+fi
 
 megaraid_bin="sudo /opt/MegaRAID/MegaCli/MegaCli64"
 
@@ -49,7 +50,7 @@ if [[ ${anyissue} -ge 1 ]]; then
    rm -f MegaSAS.log*
    rm -f CmdTool.log*
 
-   exit ${CRIT_STATE}
+   exit 2
 else
    echo "OK - No disk issue. Virtual Drives: { Degraded: "${degrade}", Offline: "${offline}" }, Physical Disks: {Failed: "${failed}"}"
 
@@ -57,5 +58,5 @@ else
    rm -f MegaSAS.log*
    rm -f CmdTool.log*
 
-   exit ${OK_STATE}
+   exit 0
 fi
