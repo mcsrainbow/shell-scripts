@@ -11,35 +11,36 @@ OK_STATE=0
 WARN_STATE=1
 CRIT_STATE=2
 
-anyissue=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
-degrade=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Degrade' | awk '/[0-9]/ {print $3}')
-critical=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep 'Critical' | awk '/[0-9]/ {print $4}')
-offline=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
-failed=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aAll | /bin/egrep '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
+megaraid_bin="sudo /opt/MegaRAID/MegaCli/MegaCli64"
+
+anyissue=$(${megaraid_bin} -AdpAllInfo -aAll | grep -E 'Degrade|[[:space:]][[:space:]]Failed|[[:space:]][[:space:]]Offline' | awk '/[1-9]/ {print $0}' | wc -l)
+degrade=$(${megaraid_bin} -AdpAllInfo -aAll | grep -E 'Degrade' | awk '/[0-9]/ {print $3}')
+critical=$(${megaraid_bin} -AdpAllInfo -aAll | grep -E 'Critical' | awk '/[0-9]/ {print $4}')
+offline=$(${megaraid_bin} -AdpAllInfo -aAll | grep -E '[[:space:]][[:space:]]Offline' | awk '/[0-9]/ {print $3}')
+failed=$(${megaraid_bin} -AdpAllInfo -aAll | grep -E '[[:space:]][[:space:]]Failed' | awk '/[0-9]/ {print $4}')
 
 if [[ ${anyissue} -ge 1 ]]; then
- sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL > /tmp/Cfgdsply.txt
- mapfile -t failed_line < <( /bin/egrep -n "Failed" /tmp/Cfgdsply.txt | cut -d':' -f1 )
+ ${megaraid_bin} -CfgDsply -aALL > /tmp/Cfgdsply.txt
+ mapfile -t failed_line < <( grep -E -n "Failed" /tmp/Cfgdsply.txt | cut -d':' -f1 )
 
- for (( i = 0; i < ${#failed_line[@]}; i++ ))
- do
+ for (( i = 0; i < ${#failed_line[@]}; i++ )); do
    sed -n "1,${failed_line[$i]}p" /tmp/Cfgdsply.txt > /tmp/Cfgdsply_tofailed.txt
    tac /tmp/Cfgdsply_tofailed.txt > /tmp/backw_Cfgdsply.txt
 
-   fadpt=$(/bin/egrep -m 1 "Adapter" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
-   enclID=$(/bin/egrep -m 1 "Enclosure Device ID" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
-   slot=$(/bin/egrep -m 1 "Slot Number" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
-   spanref=$( /bin/egrep -m 1 "Span Reference" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
-   row=$(/bin/egrep -m 1 "Physical Disk:" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   fadpt=$(grep -E -m 1 "Adapter" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   enclID=$(grep -E -m 1 "Enclosure Device ID" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   slot=$(grep -E -m 1 "Slot Number" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
+   spanref=$(grep -E -m 1 "Span Reference" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g" | cut -d'x' -f2 | cut -c 2)
+   row=$(grep -E -m 1 "Physical Disk:" /tmp/backw_Cfgdsply.txt | cut -d':' -f2 | sed -e "s/ //g")
 
    if [[ -z "${bad_drives_info}" ]]; then
-     bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"}"
+     bad_drives_info="{adapter: "${fadpt}", enclID: "${enclID}", slot: "${slot}", Span ref: "${spanref}", Row: "${row}"}"
    else
-     bad_drives_info="{adapter: "$fadpt", enclID: "$enclID", slot: "$slot", Span ref: "$spanref", Row: "$row"}, ${bad_drives_info}"
+     bad_drives_info="{adapter: "${fadpt}", enclID: "${enclID}", slot: "${slot}", Span ref: "${spanref}", Row: "${row}"}, ${bad_drives_info}"
    fi
-
  done
-   echo "CRIT - Virtual Drives: {Degraded: "$degrade", Offline: "$offline"}, Physical Disks: {Critical: "$critical", Failed: "$failed"}, Bad Drives: [${bad_drives_info}]"
+
+   echo "CRIT - Virtual Drives: {Degraded: "${degrade}", Offline: "${offline}"}, Physical Disks: {Critical: "${critical}", Failed: "${failed}"}, Bad Drives: [${bad_drives_info}]"
 
    # clean up temp files
    rm -f /tmp/Cfgdsply.txt
@@ -48,13 +49,13 @@ if [[ ${anyissue} -ge 1 ]]; then
    rm -f MegaSAS.log*
    rm -f CmdTool.log*
 
-   exit $CRIT_STATE
+   exit ${CRIT_STATE}
 else
-   echo "OK - No disk issue. Virtual Drives: { Degraded: "$degrade", Offline: "$offline" }, Physical Disks: {Failed: "$failed"}"
+   echo "OK - No disk issue. Virtual Drives: { Degraded: "${degrade}", Offline: "${offline}" }, Physical Disks: {Failed: "${failed}"}"
 
    # clean up temp files
    rm -f MegaSAS.log*
    rm -f CmdTool.log*
 
-   exit $OK_STATE
+   exit ${OK_STATE}
 fi
