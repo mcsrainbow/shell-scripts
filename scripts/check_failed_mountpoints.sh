@@ -8,7 +8,7 @@ if [[ ! -f ${excluded_mountpoints_file} ]]; then
   touch ${excluded_mountpoints_file}
 fi
 
-all_mountpoints=$(timeout 2 cat /proc/mounts | grep -E '^/dev|:/' | awk '{print $2}' | sort | xargs)
+all_mountpoints=$(/usr/bin/timeout 2 /bin/mount | grep -E '^/dev|:/' | awk '{print $2}' | sort | xargs)
 for mountpoint_item in ${all_mountpoints}; do
   if ! $(grep -Eq ^${mountpoint_item}\$ ${excluded_mountpoints_file}); then
     touch ${mountpoint_item}/mountpoint.check.tmp 2>/dev/null
