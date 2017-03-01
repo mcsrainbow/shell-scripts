@@ -83,7 +83,7 @@ function update_record(){
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
 
   sub_domain_string=$(echo ${sub_domains} | sed s/[.]/'\\\.'/g)
-  eval_command="echo \"${servername}\" | grep -Erq \'${sub_domain_string}\'"
+  eval_command="echo \"${servername}\" | grep -Erq '${sub_domain_string}'"
   if $(eval ${eval_command}); then
     sub_domain=$(echo ${servername} | awk -F '.' '{print $NF}')
     zone=${sub_domain}.${domain}
