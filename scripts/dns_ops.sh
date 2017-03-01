@@ -7,7 +7,14 @@
 base_dir="/var/named"
 server_ipaddr="172.16.2.221"
 domain="heylinux.com"
+sub_domains=".cn|.jp|.us"
 dnsaddfile="${base_dir}/dnsadd"
+
+declare -A private_keys_dict=(
+["A"]="Kheylinux.com.+178+63254.private"
+["CNAME"]="Kheylinux.com.+157+59510.private"
+["PTR"]="Kheylinux.com.+165+98364.private"
+)
 
 function check_root(){
   if [[ $EUID -ne 0 ]]; then
@@ -75,7 +82,9 @@ function check_prereq(){
 function update_record(){
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
 
-  if $(echo "${servername}" | grep -Erq '\.cn|\.jp|\.us'); then
+  sub_domain_string=$(echo ${sub_domains} | sed s/[.]/'\\\.'/g)
+  eval_command="echo \"${servername}\" | grep -Erq \'${sub_domain_string}\'"
+  if $(eval ${eval_command}); then
     sub_domain=$(echo ${servername} | awk -F '.' '{print $NF}')
     zone=${sub_domain}.${domain}
   else
@@ -89,13 +98,8 @@ function update_record(){
 
   echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}"
 
-  if [[ ${record_type} == 'CNAME' ]] || [[ ${record_type} == "A" ]]; then
-    private_file="${base_dir}/Kheylinux.com.+157+59510.private"
-  elif [[ ${record_type} == "PTR" ]]; then
-    private_file="${base_dir}/Kheylinux.com.+162+37268.private"
-  fi
-  /usr/bin/nsupdate -k ${private_file} ${dnsaddfile}
-
+  private_key=${private_keys_dict["${record_type}"]}
+  /usr/bin/nsupdate -k ${private_key} ${dnsaddfile}
   if [[ $? -eq 0 ]]; then
     echo "OK. Successful"
   else
