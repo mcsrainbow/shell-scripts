@@ -96,11 +96,6 @@ function update_record(){
   fi
   /usr/bin/nsupdate -k ${private_file} ${dnsaddfile}
 
-  # Write DNS records into zone file immediately, by default it does every 15 minutes
-  #/usr/sbin/rndc freeze ${zone}
-  #/usr/sbin/rndc reload ${zone}
-  #/usr/sbin/rndc thaw ${zone}
-
   if [[ $? -eq 0 ]]; then
     echo "OK. Successful"
   else
@@ -111,6 +106,11 @@ function update_record(){
     fi
     exit $?
   fi
+
+  # Write DNS records into zone file immediately, by default it does every 15 minutes
+  #/usr/sbin/rndc freeze ${zone}
+  #/usr/sbin/rndc reload ${zone}
+  #/usr/sbin/rndc thaw ${zone}
 }
 
 check_root
