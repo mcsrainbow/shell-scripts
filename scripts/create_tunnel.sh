@@ -6,6 +6,7 @@ tunnel_host=${1}
 dest_host_item=${2}
 
 ssh_user="trump"
+ssh_port=22
 ssh_key="/Users/trump/.ssh/id_rsa"
 
 if [[ $# -ne 2 ]] && [[ "${1}" != "list" ]]; then
@@ -35,13 +36,13 @@ if [[ -z "${dest_host_port}" ]]; then
 fi
 
 # Use a different port on localhost for ports which less than 10,000
-if [[ "${dest_host_port}" -lt 10000 ]]; then
+if [[ ${dest_host_port} -lt 10000 ]]; then
   local_host_port=$((${dest_host_port}+10000))
 else
   local_host_port=${dest_host_port}
 fi
 
-ssh -i ${ssh_key} -l ${ssh_user} -f -N -T -L ${local_host_port}:${dest_host_name}:${dest_host_port} ${tunnel_host}
+ssh -i ${ssh_key} -p ${ssh_port} -l ${ssh_user} -f -N -T -L ${local_host_port}:${dest_host_name}:${dest_host_port} ${tunnel_host}
 
 echo "Opening ${dest_host_protocol}://localhost:${local_host_port}/${dest_host_url}"
 open ${dest_host_protocol}://localhost:${local_host_port}/${dest_host_url}
