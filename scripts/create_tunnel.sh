@@ -26,7 +26,11 @@ dest_host_port=$(echo ${dest_host_item} | cut -d: -f3 | cut -d/ -f1)
 dest_host_url=$(echo ${dest_host_item} | cut -d: -f3 | cut -d/ -f2-)
 
 if [[ -z "${dest_host_port}" ]]; then
-  dest_host_port=80
+  if [[ ${dest_host_protocol} == "http" ]]; then
+    dest_host_port=80
+  elif [[ ${dest_host_protocol} == "https" ]]; then
+    dest_host_port=443
+  fi
   dest_host_url=$(echo ${dest_host_item} | cut -d: -f2 | cut -d/ -f4-)
 fi
 
