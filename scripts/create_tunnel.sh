@@ -30,6 +30,11 @@ dest_host_name=$(echo ${dest_host_item} | cut -d: -f2 | cut -d/ -f3)
 dest_host_port=$(echo ${dest_host_item} | cut -d: -f3 | cut -d/ -f1)
 dest_host_url=$(echo ${dest_host_item} | cut -d: -f3 | cut -d/ -f2-)
 
+if ! $(echo "${dest_host_protocol}" | grep -Ewq 'http|https'); then
+  echo "Need to specify the protocol: http:// or https://"
+  exit 1
+fi
+
 if [[ -z "${dest_host_port}" ]]; then
   if [[ ${dest_host_protocol} == "http" ]]; then
     dest_host_port=80
