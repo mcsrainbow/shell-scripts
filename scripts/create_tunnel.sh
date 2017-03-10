@@ -30,8 +30,8 @@ if [[ -z "${dest_host_port}" ]]; then
   dest_host_url=$(echo ${dest_host_item} | cut -d: -f2 | cut -d/ -f4-)
 fi
 
-# Use a different port on localhost for ports in range 1-1024
-if [[ "${dest_host_port}" -le 1024 ]]; then
+# Use a different port on localhost for ports which less than 10,000
+if [[ "${dest_host_port}" -lt 10000 ]]; then
   local_host_port=$((${dest_host_port}+10000))
 else
   local_host_port=${dest_host_port}
