@@ -26,7 +26,6 @@ elif [[ "${1}" == "list" ]]; then
   exit 0
 fi
 
-
 dest_host_protocol=$(echo ${dest_host_item} | cut -d: -f1)
 dest_host_name=$(echo ${dest_host_item} | cut -d: -f2 | cut -d/ -f3)
 dest_host_port=$(echo ${dest_host_item} | cut -d: -f3 | cut -d/ -f1)
