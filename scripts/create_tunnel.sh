@@ -16,10 +16,16 @@ if [[ $# -ne 2 ]] && [[ "${1}" != "list" ]]; then
   echo "       ${0} list"
   exit 1
 elif [[ "${1}" == "list" ]]; then
-  echo "SSH Tunnel Processes:"
-  ps aux | grep '\-f \-N \-T \-L'
+  output=$(ps -e -o pid,command | grep '\-f \-N \-T \-L')
+  if [[ $? -ne 0 ]]; then
+    echo "No SSH tunnel processes running"
+  else
+    echo "PID   COMMAND"
+    echo ${output}
+  fi
   exit 0
 fi
+
 
 dest_host_protocol=$(echo ${dest_host_item} | cut -d: -f1)
 dest_host_name=$(echo ${dest_host_item} | cut -d: -f2 | cut -d/ -f3)
