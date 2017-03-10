@@ -16,12 +16,11 @@ if [[ $# -ne 2 ]] && [[ "${1}" != "list" ]]; then
   echo "       ${0} list"
   exit 1
 elif [[ "${1}" == "list" ]]; then
-  output=$(ps -e -o pid,command | grep '\-f \-N \-T \-L')
-  if [[ $? -ne 0 ]]; then
+  if ! $(ps -e -o pid,command | grep -q '\-f \-N \-T \-L'); then
     echo "No SSH tunnel process running"
   else
     echo "PID   COMMAND"
-    echo ${output}
+    ps -e -o pid,command | grep '\-f \-N \-T \-L'
   fi
   exit 0
 fi
