@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Inspired by Check_MK mk-job script
+# By Dong Guo at 20170316
+#
+
+function print_help() {
+  echo "Usage: zcron IDENT PROGRAM [ARGS...]"
+  echo ""
+  echo "Execute PROGRAM as subprocess while measuring exec_time and return_code information"
+  echo "about the running process and writing it to an output file."
+  echo "Zabbix checks the job status based on the content of output file via low-level discovery items"
+  exit 1
+}
+
+if [[ $# -lt 2 ]]; then
+  print_help >&2
+fi
+
+OUTPUT_PATH=/var/tmp
+IDENT=$1
+shift
+
+if [[ ! -d "$OUTPUT_PATH" ]]; then
+  mkdir -p "$OUTPUT_PATH"
+fi
+
+if ! type $1 >/dev/null 2>&1; then
+  echo -e "ERROR: Cannot run $1. Command not found.\n" >&2
+  print_help >&2
+fi
+
+/usr/bin/time -o "${OUTPUT_PATH}/.${IDENT}.running" --append -f "${IDENT}:\n  exec_time: %e\n  return_code: %x" $@
+RC=$?
+
+mv "${OUTPUT_PATH}/.${IDENT}.running" "${OUTPUT_PATH}/zcron_${IDENT}.yml"
+exit $RC
