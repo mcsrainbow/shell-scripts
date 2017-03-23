@@ -3,6 +3,8 @@
 # Install the latest verion of Python 2.7
 #
 
+tmp_dir="/tmp"
+
 function check_root(){
   if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 1>&2
@@ -33,7 +35,7 @@ function install_python(){
 
   if [[ ! -f /usr/local/bin/python2.7 ]]; then
     echo "Installing the Python ${latest_version}..."
-    cd /tmp
+    cd ${tmp_dir}
     /usr/bin/wget --no-check-certificate https://www.python.org/ftp/python/${latest_version}/Python-${latest_version}.tgz
     if [[ $? -eq 0 ]]; then
       tar xzf Python-${latest_version}.tgz
@@ -47,11 +49,11 @@ function install_python(){
   
   if [[ ! -f /usr/local/bin/pip2.7 ]]; then
     echo "Installing the easy_install-2.7 and pip commands..."
-    cd /tmp
+    cd ${tmp_dir}
     /usr/bin/wget --no-check-certificate https://bootstrap.pypa.io/ez_setup.py -O - | /usr/local/bin/python2.7
     if [[ $? -eq 0 ]]; then
       /usr/local/bin/easy_install-2.7 pip
-      rm -rf /tmp/Python-${latest_version}*
+      rm -rf ${tmp_dir}/Python-${latest_version}*
     else
       echo "Failed to install the easy_install-2.7 command, exiting..."
       exit 1
@@ -67,7 +69,7 @@ function install_python(){
 function install_pip_packages(){
   echo "Installing the Python modules packages by pip2.7 command..."
   for package in scipy sklearn sklearn-pandas panda execnet xgboost numpy; do 
-    /usr/local/bin/pip2.7 install -b /tmp ${package}
+    /usr/local/bin/pip2.7 install -b ${tmp_dir} ${package}
   done
 }
 
