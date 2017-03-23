@@ -39,6 +39,9 @@ function install_python(){
       tar xzf Python-${latest_version}.tgz
       cd Python-${latest_version}
       ./configure && make && make altinstall
+    else
+      echo "Failed to download the Python-${latest_version}.tgz package, exiting..."
+      exit 1
     fi
   fi
   
@@ -49,6 +52,9 @@ function install_python(){
     if [[ $? -eq 0 ]]; then
       /usr/local/bin/easy_install-2.7 pip
       rm -rf /tmp/Python-${latest_version}*
+    else
+      echo "Failed to install the easy_install-2.7 command, exiting..."
+      exit 1
     fi
   fi
 
