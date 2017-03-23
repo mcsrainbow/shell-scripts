@@ -77,4 +77,4 @@ check_root
 update_pip_conf # Chinese users only
 install_rpm_packages
 install_python
-install_pip_packages
+install_pip_packages # Just for example
