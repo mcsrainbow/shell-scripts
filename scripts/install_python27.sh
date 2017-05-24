@@ -40,7 +40,7 @@ function install_python(){
     if [[ $? -eq 0 ]]; then
       tar xzf Python-${latest_version}.tgz
       cd Python-${latest_version}
-      ./configure && make && make altinstall
+      ./configure --with-threads --enable-shared && make && make altinstall
     else
       echo "Failed to download the Python-${latest_version}.tgz package, exiting..."
       exit 1
