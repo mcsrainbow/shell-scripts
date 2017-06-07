@@ -14,11 +14,13 @@ protected_dirs=(
 /rawlogs
 )
 
+hadoop_cmd="/usr/bin/hadoop"
+
 function generate_detailed_protected_dirs(){
   for dir_item in ${protected_dirs[@]}; do
     if [[ "${dir_item}" =~ "*" ]]; then
       dir_path=$(/usr/bin/dirname "${dir_item}")
-      detailed_dir_item=$(/usr/bin/hadoop fs -ls "${dir_path}" | grep '^dr' | awk '{print $NF}')
+      detailed_dir_item=$(${hadoop_cmd} fs -ls "${dir_path}" | grep '^dr' | awk '{print $NF}')
     else
       detailed_dir_item="${dir_item}"
     fi
@@ -48,4 +50,4 @@ if [[ ! -z "${return_value}" ]]; then
   exit ${return_value}
 fi
 
-/usr/bin/hadoop ${@:1}
+${hadoop_cmd} ${@:1}
