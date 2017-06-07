@@ -32,11 +32,11 @@ function generate_detailed_protected_dirs(){
 
 if [[ "$1" == "fs" ]]; then
   detailed_protected_dirs=$(generate_detailed_protected_dirs)
+  detailed_protected_dirs_list=$(echo "${detailed_protected_dirs}" | xargs -n1)
   if [[ "$2" =~ "rm" ]]; then
     dir_items="${@:3}"
     for dir_item in ${dir_items}; do
       if [[ "${dir_item}" != "-*" ]]; then
-        detailed_protected_dirs_list=$(echo "${detailed_protected_dirs}" | xargs -n1)
         if $(echo "${detailed_protected_dirs_list}" | grep -wq "^${dir_item}"); then
           echo "ERROR: The directory \"${dir_item}\" is PROTECTED, PLEASE DO NOT DELETE IT."
           return_value=2
