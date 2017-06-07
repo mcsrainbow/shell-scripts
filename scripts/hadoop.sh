@@ -31,9 +31,9 @@ function generate_detailed_protected_dirs(){
 }
 
 if [[ "$1" == "fs" ]]; then
-  detailed_protected_dirs=$(generate_detailed_protected_dirs)
-  detailed_protected_dirs_list=$(echo "${detailed_protected_dirs}" | xargs -n1)
   if [[ "$2" =~ "rm" ]]; then
+    detailed_protected_dirs=$(generate_detailed_protected_dirs)
+    detailed_protected_dirs_list=$(echo "${detailed_protected_dirs}" | xargs -n1)
     dir_items="${@:3}"
     for dir_item in ${dir_items}; do
       if [[ "${dir_item}" != "-*" ]]; then
