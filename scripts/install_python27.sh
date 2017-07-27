@@ -49,6 +49,7 @@ function install_python(){
   
   if [[ ! -f /usr/local/bin/pip2.7 ]]; then
     echo "Installing the easy_install-2.7 and pip commands..."
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
     cd ${tmp_dir}
     /usr/bin/wget --no-check-certificate https://bootstrap.pypa.io/ez_setup.py -O - | /usr/local/bin/python2.7
     if [[ $? -eq 0 ]]; then
