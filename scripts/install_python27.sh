@@ -30,6 +30,13 @@ function install_rpm_packages(){
   yum install -y openssl-devel openssl blas-devel openblas-devel cmake
 }
 
+function update_ldconfig(){
+  if ! $(grep -rq /usr/local/lib /etc/ld.so.conf.d); then
+    echo /usr/local/lib >> /etc/ld.so.conf.d/python27.conf
+    ldconfig
+  fi
+}
+
 function install_python(){
   latest_version=$(curl -s https://www.python.org/ftp/python/ | grep 'href="2.7' | tail -n 1 | cut -d\" -f 2 | cut -d\/ -f1)
 
@@ -49,7 +56,6 @@ function install_python(){
   
   if [[ ! -f /usr/local/bin/pip2.7 ]]; then
     echo "Installing the easy_install-2.7 and pip commands..."
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib"
     cd ${tmp_dir}
     /usr/bin/wget --no-check-certificate https://bootstrap.pypa.io/ez_setup.py -O - | /usr/local/bin/python2.7
     if [[ $? -eq 0 ]]; then
@@ -77,5 +83,6 @@ function install_pip_packages(){
 check_root
 update_pip_conf # Chinese users only
 install_rpm_packages
+update_ldconfig
 install_python
 install_pip_packages # Just for example
