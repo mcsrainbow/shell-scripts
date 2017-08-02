@@ -40,7 +40,11 @@ function configure_network(){
     exit 1
   fi
 
-  echo "4. Backup /etc/sysconfig/network-scripts/{ifcfg-eth0,ifcfg-eth2}"
+  echo "4. Backup /etc/sysconfig/network-scripts/{ifcfg-bond0,ifcfg-eth0,ifcfg-eth2}"
+  if [[ -f /etc/sysconfig/network-scripts/ifcfg-bond0 ]]; then
+    cp /etc/sysconfig/network-scripts/ifcfg-bond0 /etc/sysconfig/network-scripts/ifcfg-bond0.$(date +%Y%m%d%H%M%S)
+  if
+
   if [[ -f /etc/sysconfig/network-scripts/ifcfg-eth0 ]]; then
     cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.$(date +%Y%m%d%H%M%S)
   if
