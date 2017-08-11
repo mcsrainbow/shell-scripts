@@ -69,4 +69,4 @@ wait
 # print output with better order
 sum=$(wc -l ${output} |awk '{print $1}')
 echo "There are '${sum}' '${status}' ips begin with '${subnet}.' :"
-cat ${output} |sort |xargs -n 20 echo " "
+cat ${output} |sort -V |xargs -n 20 echo " "
