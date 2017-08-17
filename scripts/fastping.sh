@@ -15,17 +15,16 @@ function print_help(){
 }
 
 # check the parameter
-if [ $# -lt 1 ]; then
+if [[ $# -lt 1 ]]; then
   print_help
 fi
 
 # check the network parameter's format
 count=0
-for i in $(echo $1 |sed 's/\./ /g')
-do
+for i in $(echo $1 |sed 's/\./ /g'); do
   count=$((${count}+1))
 done
-if [ ${count} -ne 3 ]; then
+if [[ ${count} -ne 3 ]]; then
   print_help
 fi
 
@@ -51,15 +50,14 @@ function unpingable(){
 }
 
 # get the check type
-if [ "$2" == "unable" ]; then
+if [[ "$2" == "unable" ]]; then
   status="unpingable"
 else
   status="pingable"
 fi
 
 # ping as paraller mode and write output into file
-for i in {1..255}
-do 
+for i in {1..255}; do
   ${status} &
 done
 
