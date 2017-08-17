@@ -32,13 +32,13 @@ fi
 > ${output}
 
 function runping(){
-if $(echo $OSTYPE |grep -q darwin); then
-  # Mac OS
-  ping -t ${retry} -W ${timeout}000 -q ${subnet}.${i}
-else
-  # Linux/BSD
-  ping -c ${retry} -w ${timeout} -q ${subnet}.${i}
-fi
+  if $(echo $OSTYPE |grep -q darwin); then
+    # Mac OS
+    ping -t ${retry} -W ${timeout}000 -q ${subnet}.${i}
+  else
+    # Linux/BSD
+    ping -c ${retry} -w ${timeout} -q ${subnet}.${i}
+  fi
 }
 
 function pingable(){
