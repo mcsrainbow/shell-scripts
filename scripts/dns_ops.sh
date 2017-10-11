@@ -24,27 +24,28 @@ function check_root(){
 }
 
 function print_help(){
-  echo "Usage: ${0} -t A|CNAME|PTR -u add|del -n servername -v record_value"
+  echo "Usage: ${0} -t A|CNAME|PTR -u add|del -n servername -p record_value [-s ttl_seconds]"
   echo "Examples:"
-  echo "${0} -t A -u add -n ns1 -v 172.16.2.222"
-  echo "${0} -t A -u del -n ns1 -v 172.16.2.222"
+  echo "${0} -t A -u add -n ns1 -p 172.16.2.222"
+  echo "${0} -t A -u del -n ns1 -p 172.16.2.222"
   echo ""
-  echo "${0} -t A -u add -n ns1.cn -v 172.16.2.223"
-  echo "${0} -t A -u add -n ns1.jp -v 172.16.2.224"
-  echo "${0} -t A -u add -n ns1.us -v 172.16.2.225"
-  echo "${0} -t A -u del -n ns1.cn -v 172.16.2.223"
+  echo "${0} -t A -u add -n ns1.cn -p 172.16.2.223"
+  echo "${0} -t A -u add -n ns1.jp -p 172.16.2.224"
+  echo "${0} -t A -u add -n ns1.us -p 172.16.2.225"
+  echo "${0} -t A -u del -n ns1.cn -p 172.16.2.223"
   echo ""
-  echo "${0} -t CNAME -u add -n ns3 -v ns1.heylinux.com"
-  echo "${0} -t CNAME -u del -n ns3 -v ns1.heylinux.com"
+  echo "${0} -t CNAME -u add -n ns3 -p ns1.heylinux.com"
+  echo "${0} -t CNAME -u add -n ns3 -p ns1.heylinux.com -s 30"
+  echo "${0} -t CNAME -u del -n ns3 -p ns1.heylinux.com"
   echo ""
-  echo "${0} -t CNAME -u add -n ns3.cn -v ns1.cn.heylinux.com"
-  echo "${0} -t CNAME -u del -n ns3.cn -v ns1.cn.heylinux.com"
+  echo "${0} -t CNAME -u add -n ns3.cn -p ns1.cn.heylinux.com"
+  echo "${0} -t CNAME -u del -n ns3.cn -p ns1.cn.heylinux.com"
   echo ""
-  echo "${0} -t PTR -u add -n 172.16.2.222 -v ns1.heylinux.com"
-  echo "${0} -t PTR -u del -n 172.16.2.222 -v ns1.heylinux.com"
+  echo "${0} -t PTR -u add -n 172.16.2.222 -p ns1.heylinux.com"
+  echo "${0} -t PTR -u del -n 172.16.2.222 -p ns1.heylinux.com"
   echo ""
-  echo "${0} -t PTR -u add -n 172.16.2.223 -v ns1.cn.heylinux.com"
-  echo "${0} -t PTR -u del -n 172.16.2.223 -v ns1.cn.heylinux.com"
+  echo "${0} -t PTR -u add -n 172.16.2.223 -p ns1.cn.heylinux.com"
+  echo "${0} -t PTR -u del -n 172.16.2.223 -p ns1.cn.heylinux.com"
   exit 1
 }
 
@@ -80,6 +81,10 @@ function check_prereq(){
 }
 
 function update_record(){
+  if [[ -z "${ttl_seconds}" ]]; then
+    ttl_seconds=86400
+  fi
+
   echo "server ${server_ipaddr}" >> ${dnsaddfile}
 
   sub_domain_string=$(echo ${sub_domains} | sed s/[.]/'\\\.'/g)
@@ -93,10 +98,10 @@ function update_record(){
   echo "zone ${zone}" >> ${dnsaddfile}
 
   check_prereq
-  echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}" >> ${dnsaddfile}
+  echo "update $action ${servername}.${domain} ${ttl_seconds} ${record_type} ${record_value}" >> ${dnsaddfile}
   echo "send" >> ${dnsaddfile}
 
-  echo "update $action ${servername}.${domain} 86400 ${record_type} ${record_value}"
+  echo "update $action ${servername}.${domain} ${ttl_seconds} ${record_type} ${record_value}"
 
   private_key=${private_keys_dict["${record_type}"]}
   /usr/bin/nsupdate -k ${private_key} ${dnsaddfile}
@@ -118,7 +123,7 @@ function update_record(){
 }
 
 check_root
-while getopts "t:u:n:v:" opts; do
+while getopts "t:u:n:p:s:" opts; do
   case "$opts" in
     "t")
       record_type=$OPTARG
@@ -129,8 +134,11 @@ while getopts "t:u:n:v:" opts; do
     "n")
       servername=$OPTARG
       ;;
-    "v")
+    "p")
       record_value=$OPTARG
+      ;;
+    "s")
+      ttl_seconds=$OPTARG
       ;;
     *)
       print_help
