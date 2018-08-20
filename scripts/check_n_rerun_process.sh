@@ -5,7 +5,6 @@
 #
 
 base_name=$(basename ${0})
-echo ${base_name}
 
 function print_help(){
   echo "Usage: ${0} -p 'ps_string_for_Program' -n proc_num -r 'rerun_cmd' [-m max_rerun]"
