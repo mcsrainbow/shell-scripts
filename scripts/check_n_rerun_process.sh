@@ -7,8 +7,8 @@
 function print_help(){
   echo "Usage: ${0} -p 'ps_string_for_Program' -n proc_num -r 'rerun_cmd' [-m max_rerun]"
   echo "Examples:"
-  echo "${0} -p 'kafka.Kafka' -n 1 -r 'sudo service kafka-server start'"
-  echo "${0} -p 'kafka.Kafka' -n 1 -r 'sudo service kafka-server start' -m 3"
+  echo "${0} -p 'kafka.Kafka' -n 1 -r 'service kafka-server start'"
+  echo "${0} -p 'kafka.Kafka' -n 1 -r 'service kafka-server start' -m 3"
   exit 1
 }
 
