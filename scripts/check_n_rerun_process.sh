@@ -4,8 +4,6 @@
 # By Dong Guo
 #
 
-base_name=$(basename ${0})
-
 function print_help(){
   echo "Usage: ${0} -p 'ps_string_for_Program' -n proc_num -r 'rerun_cmd' [-m max_rerun]"
   echo "Examples:"
@@ -61,6 +59,7 @@ done
 if [[ -z "$proc_grep" ]] || [[ -z "$proc_num" ]] || [[ -z "$rerun_cmd" ]]; then
   print_help
 else
+  base_name=$(basename ${0})
   proc_grep_formatted=$(echo "${proc_grep}" | sed 's/\//_/g' | sed 's/ /_/g')
   rerun_count_sign=/var/tmp/${proc_grep_formatted}.max_rerun.count
   if [[ ! -f ${rerun_count_sign} ]];then
