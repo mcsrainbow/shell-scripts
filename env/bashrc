@@ -1,0 +1,33 @@
+# .bashrc
+
+# User specific aliases and functions
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias grep='grep --color=auto'
+alias la='ls -A'
+alias dusmax="sudo du -ah --max-depth 1 --exclude='proc' | sort -rh | awk '(\$1 > 0){print \$1\" \"\$2}' | grep -v [0-9]K"
+alias wget='wget --no-check-certificate'
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
+# Enable auto-completion via sudo
+complete -cf sudo
+
+# Log the history commands with time stamps
+export HISTFILESIZE="10000000"
+export HISTSIZE="10000"
+export PROMPT_COMMAND="history -a"
+export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S "
+export HISTIGNORE="history*:pwd:ls:ll:la:clear"
+export HISTCONTROL="ignoredups"
+
+# Secure PS1
+if [ $EUID -eq 0 ]; then
+  export PS1="\[\033[38;5;1m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]$(hostname -f)\[$(tput sgr0)\]\[\033[38;5;15m\]\n\[$(tput sgr0)\]\[\033[38;5;6m\][
+else
+  export PS1="\[\033[38;5;1m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]$(hostname -f)\[$(tput sgr0)\]\[\033[38;5;15m\]\n\[$(tput sgr0)\]\[\033[38;5;6m\][
+fi
