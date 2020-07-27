@@ -54,7 +54,7 @@
 #   Slot: 1 - Drive's position: DiskGroup: 0, Span: 0, Arm: 1 -  Online, Spun Up
 #
 
-Replace_failed(){
+replace_failed(){
   faild=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -PDList -aALL | /bin/egrep "Failed" | wc -l)
 
   if [ "$faild" -ge 1 ]; then
@@ -107,7 +107,7 @@ Replace_failed(){
   fi
 }
 
-Show_failed(){
+show_failed(){
   faild=$(sudo /opt/MegaRAID/MegaCli/MegaCli64 -PDList -aALL | /bin/egrep "Failed" | wc -l)
 
   if [ "$faild" -ge 1 ]; then
@@ -173,10 +173,10 @@ case $arg in
     sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL | less
     ;;
   -f)
-    Show_failed
+    show_failed
     ;;
   -r)
-    Replace_failed
+    replace_failed
   ;;
 esac
 
