@@ -81,7 +81,7 @@ function install_pip_packages(){
 }
 
 check_root
-update_pip_conf # Chinese users only
+update_pip_conf # For Chinese users only
 install_rpm_packages
 update_ldconfig
 install_python
