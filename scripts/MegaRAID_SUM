@@ -61,8 +61,7 @@ Replace_failed(){
     sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL > Cfgdsply-text
     mapfile -t failed_line < <( cat Cfgdsply-text | /bin/egrep -n "Failed" | cut -d':' -f1 )
 
-    for (( i = 0; i < ${#failed_line[@]}; i++))
-    do
+    for (( i = 0; i < ${#failed_line[@]}; i++)); do
       sed -n "1,${failed_line[$i]}p" Cfgdsply-text > Cfgdsply-tofailed-text
       tac Cfgdsply-tofailed-text > backw-Cfgdsplytext
       fadpt=$(/bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
@@ -115,8 +114,7 @@ Show_failed(){
     sudo /opt/MegaRAID/MegaCli/MegaCli64 -CfgDsply -aALL > Cfgdsply-text
     mapfile -t failed_line < <( cat Cfgdsply-text | /bin/egrep -n "Failed" | cut -d':' -f1 )
 
-    for (( i = 0; i < ${#failed_line[@]}; i++))
-    do
+    for (( i = 0; i < ${#failed_line[@]}; i++)); do
       sed -n "1,${failed_line[$i]}p" Cfgdsply-text > Cfgdsply-tofailed-text
       tac Cfgdsply-tofailed-text > backw-Cfgdsplytext
       fadpt=$(/bin/egrep -m 1 "Adapter" backw-Cfgdsplytext | cut -d':' -f2 | sed -e "s/ //g")
@@ -207,8 +205,7 @@ if [ $# -eq 0 ]; then
   cat Adpallinfo-text | /bin/egrep -A 9 'Device Present'
   echo
   
-  for (( i = 0;  i < ${#VIRTdrives[@]}; i++))
-  do
+  for (( i = 0;  i < ${#VIRTdrives[@]}; i++)); do
     echo "${VIRTdrives[$i]} | RAIDlvl: ${RAIDlvl[$i]} | #Drives:${drivenum[$i]} | State:${RAIDstate[$i]} | Span Ref: ${SPANref[$i]} | Size:${RAIDsize[$i]}"
   done
   
@@ -216,8 +213,7 @@ if [ $# -eq 0 ]; then
   mapfile -t firmstate < <(cat Pdlist-text | /bin/grep "Firmware state" | cut -d':' -f2)
   mapfile -t position < <(cat Pdlist-text | /bin/grep "Drive's position" | cut -f2,4)
   echo
-  for (( i = 0; i < ${#slotnum[@]}; i++))
-  do
+  for (( i = 0; i < ${#slotnum[@]}; i++)); do
     echo "Slot: ${slotnum[$i]} - ${position[$i]} - ${firmstate[$i]}"
   done
   
