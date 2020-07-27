@@ -98,7 +98,7 @@ Replace_failed(){
       fi
     done
 
-    # temp file clean-up
+    # cleanup tmp files
     rm -f Cfgdsply-text
     rm -f Cfgdsply-tofailed-text
     rm -f backw-Cfgdsplytext
@@ -144,7 +144,7 @@ Show_failed(){
       fi
     done
 
-    # temp file clean-up
+    # cleanup tmp files
     rm -f Cfgdsply-text
     rm -f Cfgdsply-tofailed-text
     rm -f backw-Cfgdsplytext
@@ -221,7 +221,7 @@ if [ $# -eq 0 ]; then
     echo "Slot: ${slotnum[$i]} - ${position[$i]} - ${firmstate[$i]}"
   done
   
-  # Clean up temp files
+  # cleanup tmp files
   rm -f Adpallinfo-text
   rm -f Cfgdsply-text
   rm -f Pdlist-text
