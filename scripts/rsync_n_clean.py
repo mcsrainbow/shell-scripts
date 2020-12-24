@@ -42,7 +42,7 @@ def rsync_data(rsync_src_dir,rsync_dst_dir,rsync_user,sftp_user_conf,sftp_prod_i
         with open(timeline_yaml, 'w') as f:
             yaml.dump(data_dict, f, default_flow_style=False)
     else:
-        print("ERROR: Incorrect data in {0}: data_dict_key_num:{1} < sftp_user_num:{2}".format(len(data_dict['rsync_timeline_succeeded']),len(sftp_user_list)))
+        print("ERROR: Incorrect data in {0}: data_dict_key_num:{1} < sftp_user_num:{2}".format(timeline_yaml,len(data_dict['rsync_timeline_succeeded']),len(sftp_user_list)))
         return False
 
     return True
