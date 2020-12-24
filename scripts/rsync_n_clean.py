@@ -21,13 +21,13 @@ def get_sftp_user(sftp_user_conf,rsync_src_dir):
 
     return sftp_user_list
 
-def rsync_data(rsync_src_dir,rsync_dst_dir,rsync_user,sftp_user_conf,sftp2_ip,timeline_yaml):
+def rsync_data(rsync_src_dir,rsync_dst_dir,rsync_user,sftp_user_conf,sftp_prod_ip,timeline_yaml):
     sftp_user_list = get_sftp_user(sftp_user_conf,rsync_src_dir)
     with open(timeline_yaml) as f:
         data_dict = yaml.load(f)
         for user in sftp_user_list:
             date_str = datetime.now().strftime("%Y%m%d")
-            rsync_cmd_str = "/usr/bin/rsync --timeout=10 --delete --log-file={0}/logs/rsync.{1}.log -ravz {0}/{2} {3}@{4}:{5}/{2}".format(rsync_src_dir,date_str,user,rsync_user,sftp2_ip,rsync_dst_dir)
+            rsync_cmd_str = "/usr/bin/rsync --timeout=10 --delete --log-file={0}/logs/rsync.{1}.log -ravz {0}/{2} {3}@{4}:{5}/{2}".format(rsync_src_dir,date_str,user,rsync_user,sftp_prod_ip,rsync_dst_dir)
             print("INFO: Running command: {0}".format(rsync_cmd_str))
             rsync_cmd = subprocess.Popen(rsync_cmd_str, shell=True, executable=shell)
             (stdout, stderr) = rsync_cmd.communicate()
