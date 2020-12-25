@@ -6,7 +6,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias grep='grep --color=auto'
 alias la='ls -A'
-alias dusmax="sudo du -ah --max-depth 1 --exclude='proc' | sort -rh | awk '(\$1 > 0){print \$1\" \"\$2}' | grep -v [0-9]K"
+alias dusmax="du -ah --max-depth 1 --exclude='proc' | sort -k2 | awk '(\$1 > 0){print \$1\"\\t\"\$2}' | grep -E '[0-9]M|[0-9]G|[0-9]T'"
 alias wget='wget --no-check-certificate'
 
 # Source global definitions
