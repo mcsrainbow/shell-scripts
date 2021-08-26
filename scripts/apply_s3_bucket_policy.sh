@@ -47,7 +47,7 @@ policy_json_data='
 
 bucket_list=$(${aws_cli} s3 ls | awk '{print $NF}')
 for bucket in ${bucket_list}; do
-  if $(${aws_cli} s3api get-bucket-tagging --bucket ${bucket} 2>/dev/null | grep -w "Xxxx" -B1 | grep -Ewq "Xxxa|Xxxb"); then
+  if $(${aws_cli} s3api get-bucket-tagging --bucket ${bucket} 2>/dev/null | grep -w "Xxxx" -A1 | grep -Ewq "Xxxa|Xxxb"); then
     echo "Updating the bucket policy of s3://${bucket} ..."
     echo ${policy_json_data} | sed s/BUCKET_NAME/${bucket}/g > /tmp/bucket_policy.json
     ${aws_cli} s3api put-bucket-policy --bucket ${bucket} --policy file:///tmp/bucket_policy.json
