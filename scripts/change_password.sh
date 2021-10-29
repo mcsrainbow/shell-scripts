@@ -33,6 +33,6 @@ expect {
       exit 0 }
     }
   }
-  "wait longer" {
+  "You must wait longer to change" {
   exit 1 }
 }
