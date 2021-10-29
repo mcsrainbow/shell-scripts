@@ -8,7 +8,6 @@ set oldpass [lindex $argv 2]
 set newpass [lindex $argv 3]
 
 spawn ssh -tq ${user}@${host}
-#spawn ssh ${user}@${host}
 expect "ssword:"
 send "${oldpass}\r"
 expect "${user}@"
