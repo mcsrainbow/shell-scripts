@@ -24,9 +24,9 @@ expect {
       "Authentication token manipulation error" {
       exit 1 }
       "Retype new password:" {
-      send "${newpass}\r"
-      expect "${user}@"
-      send "exit\r"
+        send "${newpass}\r"
+        expect "${user}@"
+        send "exit\r"
       exit 0 }
       eof {
       exit 0 }
