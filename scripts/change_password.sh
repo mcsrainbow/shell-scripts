@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-# ./change_pasword.sh host user oldpass newpass
+# ./change_password.sh host user oldpass newpass
 
 set timeout 5
 set host [lindex $argv 0]
