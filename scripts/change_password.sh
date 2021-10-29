@@ -14,24 +14,24 @@ send "passwd\r"
 expect "current"
 send "${oldpass}\r"
 expect {
-       "New password:" {
-        send "${newpass}\r"
-     expect {
-     "BAD PASSWORD" {
-     exit 1 }
-     "Password unchanged" {
-     exit 1 }
-     "Authentication token manipulation error" {
-     exit 1 }
-     "Retype new password:" {
-     send "${newpass}\r"
-     expect "${user}@"
-     send "exit\r"
-     exit 0 }
-     eof {
-     exit 0 }
-     }
-}
-      "wait longer" {
-     exit 1 }
+  "New password:" {
+    send "${newpass}\r"
+    expect {
+      "BAD PASSWORD" {
+      exit 1 }
+      "Password unchanged" {
+      exit 1 }
+      "Authentication token manipulation error" {
+      exit 1 }
+      "Retype new password:" {
+      send "${newpass}\r"
+      expect "${user}@"
+      send "exit\r"
+      exit 0 }
+      eof {
+      exit 0 }
+    }
+  }
+  "wait longer" {
+  exit 1 }
 }
