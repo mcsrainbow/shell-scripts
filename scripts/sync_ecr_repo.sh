@@ -28,7 +28,6 @@ function check_params(){
   else
     src_aws_id=${1}
     dst_aws_id=${2}
-    
     docker_password=$(${aws_cli} ecr get-login-password --region ${aws_region})
   fi
 }
