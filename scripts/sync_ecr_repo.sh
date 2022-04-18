@@ -9,16 +9,15 @@ redis:latest
 openjdk:8-jdk
 )
 
-ecr_json='\
-{"Version":"2008-10-17",\
-"Statement":\
-[{"Sid":"AllowCrossAccountPull",\
-"Effect":"Allow",\
-"Principal":\
-{"AWS":"arn:aws:iam::857857857857:root"},\
-"Action":\
-["ecr:BatchCheckLayerAvailability",\
-"ecr:BatchGetImage",\
+ecr_json='{"Version":"2008-10-17",
+"Statement":
+[{"Sid":"AllowCrossAccountPull",
+"Effect":"Allow",
+"Principal":
+{"AWS":"arn:aws:iam::857857857857:root"},
+"Action":
+["ecr:BatchCheckLayerAvailability",
+"ecr:BatchGetImage",
 "ecr:GetDownloadUrlForLayer"]}]}'
 
 function check_params(){
