@@ -1,9 +1,9 @@
 #!/bin/bash
 
-aws_cli="/usr/bin/aws"
 aws_region="us-west-1"
-
+aws_cli="/usr/bin/aws --region ${aws_region}"
 image_prefix="dkr.ecr.${aws_region}.amazonaws.com"
+
 image_list=(
 redis:latest
 openjdk:8-jdk
