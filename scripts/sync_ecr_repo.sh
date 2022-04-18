@@ -47,7 +47,7 @@ function push_ecr_images(){
     repo_name=$(echo $image | cut -d: -f1)
     if ! $(echo ${repo_list} | grep -wq "${repo_name}"); then
       ${aws_cli} ecr create-repository --repository-name ${repo_name}
-      ${aws_cli} ecr set-repository-policy --repository-name ${repo_name} --policy-text '${ecr_json}'
+      ${aws_cli} ecr set-repository-policy --repository-name ${repo_name} --policy-text "${ecr_json}"
     fi
       docker tag ${src_aws_id}.${image_prefix}/${image} ${dst_aws_id}.${image_prefix}/${image}
       docker push ${dst_aws_id}.${image_prefix}/${image}
