@@ -40,7 +40,7 @@ function configure_network(){
     exit 1
   fi
 
-  echo "4. Backup /etc/sysconfig/network-scripts/{ifcfg-bond0,ifcfg-eth0,ifcfg-eth2}"
+  echo "4. Backup /etc/sysconfig/network-scripts/{ifcfg-bond0,ifcfg-eth0,ifcfg-eth1}"
   if [[ -f /etc/sysconfig/network-scripts/ifcfg-bond0 ]]; then
     cp /etc/sysconfig/network-scripts/ifcfg-bond0 /etc/sysconfig/network-scripts/ifcfg-bond0.$(date +%Y%m%d%H%M%S)
   if
@@ -49,11 +49,11 @@ function configure_network(){
     cp /etc/sysconfig/network-scripts/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0.$(date +%Y%m%d%H%M%S)
   if
 
-  if [[ -f /etc/sysconfig/network-scripts/ifcfg-eth2 ]]; then
-    cp /etc/sysconfig/network-scripts/ifcfg-eth2 /etc/sysconfig/network-scripts/ifcfg-eth2.$(date +%Y%m%d%H%M%S)
+  if [[ -f /etc/sysconfig/network-scripts/ifcfg-eth1 ]]; then
+    cp /etc/sysconfig/network-scripts/ifcfg-eth1 /etc/sysconfig/network-scripts/ifcfg-eth1.$(date +%Y%m%d%H%M%S)
   if
 
-  echo "5. Configure /etc/sysconfig/network-scripts/{ifcfg-bond0,ifcfg-eth0,ifcfg-eth2}"  
+  echo "5. Configure /etc/sysconfig/network-scripts/{ifcfg-bond0,ifcfg-eth0,ifcfg-eth1}"  
   cat > /etc/sysconfig/network-scripts/ifcfg-bond0 <<EOF
 DEVICE=bond0
 ONBOOT=yes
@@ -73,8 +73,8 @@ SLAVE=yes
 USERCTL=no
 EOF
 
-  cat > /etc/sysconfig/network-scripts/ifcfg-eth2 <<EOF
-DEVICE=eth2
+  cat > /etc/sysconfig/network-scripts/ifcfg-eth1 <<EOF
+DEVICE=eth1
 BOOTPROTO=none
 MASTER=bond0
 ONBOOT=yes
