@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Applies S3 bucket policy to the S3 buckets which have specific tags
-# To limit the access as only from specific VPCs and RoleArns and SourceIPs
+# Apply S3 bucket policy to the S3 buckets which have specific tags
+# To limit the access only from specific VPCs and ARNs and SourceIPs
 
 aws_cli="/usr/bin/aws"
 policy_json_data='
 {
     "Version": "2012-10-17",
-    "Id": "VPCs and RoleArns and SourceIPs",
+    "Id": "Restrict VPCs and ARNs and SourceIPs",
     "Statement": [
         {
-            "Sid": "VPCs and SourceIPs",
+            "Sid": "VPCs and ARNs and SourceIPs",
             "Effect": "Deny",
             "Principal": "*",
             "Action": "s3:*",
@@ -19,7 +19,10 @@ policy_json_data='
                 "arn:aws:s3:::BUCKET_NAME/*"
             ],
             "Condition": {
-                "ForAllValues:StringNotEquals": {
+                "Bool": {
+                    "aws:ViaAWSService": "false"
+                },          
+                "StringNotEqualsIfExists": {
                     "aws:SourceVpc": [
                         "vpc-xxxxxxxxxxxxxxxxa",
                         "vpc-xxxxxxxxxxxxxxxxb"
@@ -29,11 +32,11 @@ policy_json_data='
                     "aws:PrincipalArn": [
                         "arn:aws:iam::xxxxxxxxxxxa:role/XxxxXxxc",
                         "arn:aws:iam::xxxxxxxxxxxb:role/XxxxXxxc",
-                        "arn:aws:iam::xxxxxxxxxxxa:role/*Xxxd*",
-                        "arn:aws:iam::xxxxxxxxxxxb:role/*Xxxd*
+                        "arn:aws:iam::xxxxxxxxxxxa:role/Xxxd*",
+                        "arn:aws:iam::xxxxxxxxxxxb:role/Xxxd*
                     ]
                 },
-                "ForAllValues:NotIpAddress": {
+                "NotIpAddressIfExists": {
                     "aws:SourceIp": [
                         "1.1.1.1/32",
                         "1.1.1.2/32"
