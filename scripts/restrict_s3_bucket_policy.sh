@@ -31,10 +31,8 @@ policy_json_data='
                 },
                 "ArnNotLikeIfExists": {
                     "aws:PrincipalArn": [
-                        "arn:aws:iam::857857857857:role/YourRoleName",
-                        "arn:aws:iam::361361361361:role/YourRoleName",
-                        "arn:aws:iam::857857857857:role/Role*",
-                        "arn:aws:iam::361361361361:role/Role*"
+                        "arn:aws:iam::857857857857:role/*",
+                        "arn:aws:iam::361361361361:role/*"
                     ]
                 },
                 "NotIpAddressIfExists": {
