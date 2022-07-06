@@ -22,23 +22,25 @@ policy_json_data='
             "Condition": {
                 "Bool": {
                     "aws:ViaAWSService": "false"
-                },
+                },            
                 "StringNotEqualsIfExists": {
                     "aws:SourceVpc": [
-                        "vpc-85785785785785787",
-                        "vpc-23323323323323323"
+                        "vpc-857abc857abc875aa",
+                        "vpc-857cba857cba875bb"
                     ]
                 },
                 "ArnNotLikeIfExists": {
                     "aws:PrincipalArn": [
-                        "arn:aws:iam::857857857857:role/*",
-                        "arn:aws:iam::233233233233:role/*"
+                        "arn:aws:iam::857857857857:role/YourRoleName",
+                        "arn:aws:iam::361361361361:role/YourRoleName",
+                        "arn:aws:iam::857857857857:role/Role*",
+                        "arn:aws:iam::361361361361:role/Role*"
                     ]
                 },
                 "NotIpAddressIfExists": {
                     "aws:SourceIp": [
-                        "85.75.85.75/32",
-                        "23.32.23.32/32"
+                        "8.5.7.11/32",
+                        "8.5.7.22/32"
                     ]
                 }
             }
