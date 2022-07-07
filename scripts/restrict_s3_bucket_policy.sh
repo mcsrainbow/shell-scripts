@@ -8,10 +8,10 @@ aws_cli="/usr/local/bin/aws"
 policy_json_data='
 {
     "Version": "2012-10-17",
-    "Id": "Restrict VPCs and ARNs and SourceIPs",
+    "Id": "RestrictVPCsARNsSourceIPs",
     "Statement": [
         {
-            "Sid": "VPCs and ARNs and SourceIPs",
+            "Sid": "VPCsARNsSourceIPs",
             "Effect": "Deny",
             "Principal": "*",
             "Action": "s3:*",
