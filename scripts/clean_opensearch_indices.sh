@@ -3,7 +3,7 @@
 opensearch_url="https://opensearch.heylinux.com"
 user_pass="username:password"
 
-indices_items=$(curl -s -XGET -k -u ${user_pass} "${opensearch_url}/_cat/indices?pretty=true" | grep logstash | awk '{print $3}' | xargs)
+indices_items=$(curl -s -XGET -k -u ${user_pass} "${opensearch_url}/_cat/indices?pretty=true" | awk '{print $3}' | grep -E '^[a-z]|^[A-Z]' | xargs)
 clean_date=$(date --date="30 days ago" +%Y%m%d)
 
 for index_item in ${indices_items}; do
