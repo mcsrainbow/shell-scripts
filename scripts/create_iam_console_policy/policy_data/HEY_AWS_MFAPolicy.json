@@ -1,0 +1,77 @@
+{
+    "Version": "2012-10-17",
+    "Id": "AllowUsersMFASelfService",
+    "Statement": [
+        {
+            "Sid": "AllowAllUsersToListAccounts",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListAccountAliases",
+                "iam:ListUsers"
+            ],
+            "Resource": [
+                "arn:aws:iam::857857857857:user/*"
+            ]
+        },
+        {
+            "Sid": "AllowIndividualUserToSeeTheirAccountInformation",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetAccountPasswordPolicy",
+                "iam:GetAccountSummary",
+                "iam:GetLoginProfile"
+            ],
+            "Resource": [
+                "arn:aws:iam::857857857857:user/${aws:username}",
+                "arn:aws:iam::857857857857:user/heysrv/${aws:username}"
+            ]
+        },
+        {
+            "Sid": "AllowIndividualUserToListTheirMFA",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListVirtualMFADevices",
+                "iam:ListMFADevices"
+            ],
+            "Resource": [
+                "arn:aws:iam::857857857857:mfa/*",
+                "arn:aws:iam::857857857857:user/${aws:username}",
+                "arn:aws:iam::857857857857:user/heysrv/${aws:username}"
+            ]
+        },
+        {
+            "Sid": "AllowIndividualUserToManageThierMFA",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateVirtualMFADevice",
+                "iam:DeactivateMFADevice",
+                "iam:DeleteVirtualMFADevice",
+                "iam:EnableMFADevice",
+                "iam:ResyncMFADevice"
+            ],
+            "Resource": [
+                "arn:aws:iam::857857857857:mfa/${aws:username}",
+                "arn:aws:iam::857857857857:user/${aws:username}",
+                "arn:aws:iam::857857857857:user/heysrv/${aws:username}"
+            ]
+        },
+        {
+            "Sid": "DoNotAllowAnythingOtherThanAboveUnlessMFAd",
+            "Effect": "Deny",
+            "NotAction": "iam:*",
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:MultiFactorAuthPresent": "false",
+                    "aws:ViaAWSService": "false"
+                },
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpc": [
+                        "vpc-857abc857abc875aa",
+                        "vpc-857cba857cba875bb"
+                    ]
+                }
+            }
+        }
+    ]
+}
