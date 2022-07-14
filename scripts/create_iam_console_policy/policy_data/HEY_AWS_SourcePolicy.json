@@ -1,0 +1,30 @@
+{
+    "Version": "2012-10-17",
+    "Id": "RestrictVPCsAndSourceIPs",
+    "Statement": [
+        {
+            "Sid": "SourceIpVpcWhitelist",
+            "Effect": "Deny",
+            "Action": "*",
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:ViaAWSService": "false"
+                },
+                "NotIpAddressIfExists": {
+                    "aws:SourceIp": [
+                        "8.5.7.11/32",
+                        "8.5.7.22/32",
+                        "8.5.7.33/32"
+                    ]
+                },
+                "StringNotEqualsIfExists": {
+                    "aws:SourceVpc": [
+                        "vpc-857abc857abc875aa",
+                        "vpc-857cba857cba875bb"
+                    ]
+                }
+            }
+        }
+    ]
+}
