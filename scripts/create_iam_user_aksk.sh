@@ -54,16 +54,12 @@ for item in ${user_group_policy[@]}; do
   access_keys=$(${aws_cmd} iam list-access-keys --user-name ${user_name} | grep -w AccessKeyId | cut -d: -f2 | cut -d, -f1 | sed s/\"//g | xargs)
   if [ -a generated_aksk/${user_name}.json ]; then
     access_key=$(grep -w AccessKeyId generated_aksk/${user_name}.json | cut -d: -f2 | cut -d, -f1 | sed s/\"//g)
-    if [ ! -z "${access_key}" ]; then
-      if $(echo ${access_keys} | grep -q ${access_key}); then
-        echo "Found Access Key: ${access_key} in generated_aksk/${user_name}.json"
-      else
-        ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
-      fi
-    else
-      ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
-    fi
-  else
-    ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
   fi
+  if [ ! -z "${access_key}" ]; then
+    if $(echo ${access_keys} | grep -q ${access_key}); then
+      echo "Found Access Key: ${access_key} in generated_aksk/${user_name}.json"
+      continue
+    fi
+  fi
+  ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
 done
