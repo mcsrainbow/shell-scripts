@@ -51,12 +51,12 @@ for item in ${user_group_policy[@]}; do
     ${aws_cmd} iam add-user-to-group --group-name ${group_name} --user-name ${user_name}
   fi
 
-  access_keys=$(${aws_cmd} iam list-access-keys --user-name ${user_name} | grep -w AccessKeyId | cut -d: -f2 | cut -d\" -f2 | xargs)
+  user_all_access_keys=$(${aws_cmd} iam list-access-keys --user-name ${user_name} | grep -w AccessKeyId | cut -d: -f2 | cut -d\" -f2 | xargs)
   if [ -a generated_aksk/${user_name}.json ]; then
     access_key=$(grep -w AccessKeyId generated_aksk/${user_name}.json | cut -d: -f2 | cut -d\" -f2)
   fi
   if [ ! -z "${access_key}" ]; then
-    if $(echo ${access_keys} | grep -q ${access_key}); then
+    if $(echo ${user_all_access_keys} | grep -q ${access_key}); then
       echo "INFO: Found Access Key: ${access_key} in generated_aksk/${user_name}.json"
       continue
     fi
