@@ -51,9 +51,9 @@ for item in ${user_group_policy[@]}; do
     ${aws_cmd} iam add-user-to-group --group-name ${group_name} --user-name ${user_name}
   fi
 
-  access_keys=$(${aws_cmd} iam list-access-keys --user-name ${user_name} | grep -w AccessKeyId | cut -d: -f2 | cut -d, -f1 | sed s/\"//g | xargs)
+  access_keys=$(${aws_cmd} iam list-access-keys --user-name ${user_name} | grep -w AccessKeyId | cut -d: -f2 | cut -d\" -f2 | xargs)
   if [ -a generated_aksk/${user_name}.json ]; then
-    access_key=$(grep -w AccessKeyId generated_aksk/${user_name}.json | cut -d: -f2 | cut -d, -f1 | sed s/\"//g)
+    access_key=$(grep -w AccessKeyId generated_aksk/${user_name}.json | cut -d: -f2 | cut -d\" -f2)
   fi
   if [ ! -z "${access_key}" ]; then
     if $(echo ${access_keys} | grep -q ${access_key}); then
@@ -61,6 +61,6 @@ for item in ${user_group_policy[@]}; do
       continue
     fi
   fi
-  echo "INFO: Generated AKSK of user ${user_name} in generated_aksk/${user_name}.json"
+  echo "INFO: Generated AKSK of User: /${srv_path}/${user_name} in generated_aksk/${user_name}.json"
   ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
 done
