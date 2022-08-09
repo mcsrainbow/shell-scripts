@@ -7,10 +7,10 @@
 #
 # Use "./hdfs_clean.sh delete" to trigger the action
 
-#given above list, create a script to find directories older than X days
+# Given above list, create a script to find directories older than X days
 DATA_FILE="data.txt"
 
-#2. script should take a configuration file, with delete days threshold and list of directories
+# 2. Script should take a configuration file, with delete days threshold and list of directories
 DELETE_DAYS_THRESHOLD=9
 DIRECTORIES_LIST=(
 /user/oozie/data/dpp/hive
@@ -22,7 +22,7 @@ DIRECTORIES_LIST=(
 NOW_TIMESTAMP=$(date +%s)
 THRESHOLD_TIMESTAMP=$(($NOW_TIMESTAMP-$DELETE_DAYS_THRESHOLD*86400))
 
-#4. directory depth under /user/oozie/data/dpp/hive/ can be variable
+# 4. Directory depth under /user/oozie/data/dpp/hive/ can be variable
 DIRECTORY_DEPTH=2
 function check_dir_withdepth(){
   DEPTH=$(($DIRECTORY_DEPTH+6))
@@ -36,17 +36,17 @@ function check_dir_formated(){
     if [ ${DIRECTORY} == "/user/oozie/data/dpp/hive" ]; then
       check_dir_withdepth  
     else      
-      #3. ignore files, look at directories only
+      # 3. Ignore files, look at directories only
       SUBDIRECTORIES=$(grep -w ${DIRECTORY} ${DATA_FILE} | grep "drwxr" | awk '{print $8}' | grep [2][0-9][0-9][0-9]-[0-9][0-9])
     fi
     if [ ! -z "${SUBDIRECTORIES}" ]; then
       for SUBDIRECTORY in ${SUBDIRECTORIES[@]}
       do 
-        #5. use directory name instead of last modified time
+        # 5. Use directory name instead of last modified time
         DIRECTORIES_TIME=$(echo ${SUBDIRECTORY} | awk -F "/" '{print $NF}' | awk -F "=" '{print $NF}' | awk -F "-" '{print $1"-"$2"-"$3}')
         DIRECTORIES_TIMESTAMP=$(date -d ${DIRECTORIES_TIME} +%s)
         if [ ${DIRECTORIES_TIMESTAMP} -lt ${THRESHOLD_TIMESTAMP} ]; then
-          #1. script should run in DEBUG mode by default (print only) and has a switch to actually run delete
+          # 1. Script should run in DEBUG mode by default (print only) and has a switch to actually run delete
           if [ "$1" == "delete" ]; then
             echo "sudo -u oozie hadoop fs -rmr ${SUBDIRECTORY}"
           else
@@ -58,7 +58,7 @@ function check_dir_formated(){
   done
 }
 
-#6. directory date can be in the format of dt=2013-06-30-00-00 or dt=2013-04-19 or 2013-05-14-18-00; print directories not matching these pattern
+# 6. Directory date can be in the format of dt=2013-06-30-00-00 or dt=2013-04-19 or 2013-05-14-18-00; print directories not matching these pattern
 function check_dir_noformat(){
   echo ""
   echo "Here are the directories without data format:"
