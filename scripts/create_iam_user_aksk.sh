@@ -20,33 +20,33 @@ for item in ${user_group_policy[@]}; do
   echo "INFO: Checking item: ${item}..."
 
   if $(echo ${all_groups} | grep -wq ${group_name}); then
-    echo "Found Group: /${srv_path}/${group_name}"
+    echo "INFO: Found Group: /${srv_path}/${group_name}"
   else
     ${aws_cmd} iam create-group --path /${srv_path}/ --group-name ${group_name}
   fi
 
   if $(echo ${all_policies} | grep -wq ${policy_name}); then
-    echo "Found Policy: /${srv_path}/${policy_name}"
+    echo "INFO: Found Policy: /${srv_path}/${policy_name}"
   else
     ${aws_cmd} iam create-policy --path /${srv_path}/ --policy-name ${policy_name} --policy-document file://policy_data/${policy_name}.json
   fi
 
   group_policies=$(${aws_cmd} iam list-attached-group-policies --group-name ${group_name} | grep -w PolicyName | xargs)
   if $(echo ${group_policies} | grep -wq ${policy_name}); then
-    echo "Found Policy: /${srv_path}/${policy_name} in Group: /${srv_path}/${group_name}"
+    echo "INFO: Found Policy: /${srv_path}/${policy_name} in Group: /${srv_path}/${group_name}"
   else
     ${aws_cmd} iam attach-group-policy --policy-arn arn:aws:iam::${aws_account_id}:policy/${srv_path}/${policy_name} --group-name ${group_name}
   fi
 
   if $(echo ${all_users} | grep -wq ${user_name}); then
-    echo "Found User: /${srv_path}/${user_name}"
+    echo "INFO: Found User: /${srv_path}/${user_name}"
   else
     ${aws_cmd} iam create-user --path /${srv_path}/ --user-name ${user_name}
   fi
 
   user_groups=$(${aws_cmd} iam list-groups-for-user --user-name ${user_name} | grep -w GroupName | xargs)
   if $(echo ${user_groups} | grep -wq ${group_name}); then
-    echo "Found Group: /${srv_path}/${group_name} of User: /${srv_path}/${user_name}"
+    echo "INFO: Found Group: /${srv_path}/${group_name} of User: /${srv_path}/${user_name}"
   else
     ${aws_cmd} iam add-user-to-group --group-name ${group_name} --user-name ${user_name}
   fi
@@ -57,7 +57,7 @@ for item in ${user_group_policy[@]}; do
   fi
   if [ ! -z "${access_key}" ]; then
     if $(echo ${access_keys} | grep -q ${access_key}); then
-      echo "Found Access Key: ${access_key} in generated_aksk/${user_name}.json"
+      echo "INFO: Found Access Key: ${access_key} in generated_aksk/${user_name}.json"
       continue
     fi
   fi
