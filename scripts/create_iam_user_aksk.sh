@@ -17,7 +17,7 @@ for item in ${user_group_policy[@]}; do
   policy_name=$(echo ${item} | cut -d, -f3)
 
   echo ""
-  echo "INFO: Checking item: ${item}..."
+  echo "INFO: Checking User_Group_Policy: ${item}..."
 
   if $(echo ${all_groups} | grep -wq ${group_name}); then
     echo "INFO: Found Group: /${srv_path}/${group_name}"
