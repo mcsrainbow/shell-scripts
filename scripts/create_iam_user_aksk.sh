@@ -61,5 +61,6 @@ for item in ${user_group_policy[@]}; do
       continue
     fi
   fi
+  echo "INFO: Generated AKSK of user ${user_name} in generated_aksk/${user_name}.json"
   ${aws_cmd} iam create-access-key --user-name ${user_name} > generated_aksk/${user_name}.json
 done
