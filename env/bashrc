@@ -25,7 +25,9 @@ export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S "
 export HISTIGNORE="history*:pwd:ls:ll:la:clear"
 export HISTCONTROL="ignoredups"
 
-# Secure PS1
+# Secure PS1 with colors
+ps1_open_esc=$'\001'                                                                                                                                                      
+ps1_close_esc=$'\002'
 tput_black=$(tput setaf 0)
 tput_red=$(tput setaf 1)
 tput_green=$(tput setaf 2)
@@ -36,4 +38,5 @@ tput_cyan=$(tput setaf 6)
 tput_white=$(tput setaf 7)
 tput_bold=$(tput bold)
 tput_reset=$(tput sgr0)
-export PS1="${tput_red}\u${tput_cyan}@${tput_yellow}\H:${tput_blue}\w\n${tput_yellow}\\$ ${tput_reset}"
+
+export PS1="${ps1_open_esc}${tput_red}\u${tput_cyan}@${tput_yellow}\H:${tput_blue}\w\n${tput_yellow}\\$ ${tput_reset}${ps1_close_esc}"
