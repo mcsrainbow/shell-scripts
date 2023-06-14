@@ -24,58 +24,32 @@ export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S "
 export HISTIGNORE="history*:pwd:ls:ll:la:clear"
 export HISTCONTROL="ignoredups"
 
-# Enable color in terminal via tput
-_tput_black=$(tput setaf 0)
-_tput_red=$(tput setaf 1)
-_tput_green=$(tput setaf 2)
-_tput_yellow=$(tput setaf 3)
-_tput_blue=$(tput setaf 4)
-_tput_magenta=$(tput setaf 5)
-_tput_cyan=$(tput setaf 6)
-_tput_white=$(tput setaf 7)
-_tput_bold=$(tput bold)
-_tput_reset=$(tput sgr0)
-
 # Readline library accepts \001 and \002 as non-visible text delimiters
 # The bash-specific \[ and \] are translated to \001 and \002
-_non_a=$'\001' # non-visible text begin
-_non_b=$'\002' # non-visible text end
+_nvt_open=$'\001' # non-visible text open
+_nvt_close=$'\002' # non-visible text close
+
+# Enable color in terminal with tput and non-visible text delimiters
+_tput_black=${_nvt_open}$(tput setaf 0)${_nvt_close}
+_tput_red=${_nvt_open}$(tput setaf 1)${_nvt_close}
+_tput_green=${_nvt_open}$(tput setaf 2)${_nvt_close}
+_tput_yellow=${_nvt_open}$(tput setaf 3)${_nvt_close}
+_tput_blue=${_nvt_open}$(tput setaf 4)${_nvt_close}
+_tput_magenta=${_nvt_open}$(tput setaf 5)${_nvt_close}
+_tput_cyan=${_nvt_open}$(tput setaf 6)${_nvt_close}
+_tput_white=${_nvt_open}$(tput setaf 7)${_nvt_close}
+_tput_bold=${_nvt_open}$(tput bold)${_nvt_close}
+_tput_reset=${_nvt_open}$(tput sgr0)${_nvt_close}
 
 # Show current git branch with colors in Bash prompt
 function _git_branch(){
   if [ -d ".git" ]; then
     local git_branch=$(git branch --show-current 2>/dev/null)
     if [[ -n ${git_branch} ]]; then
-      echo "(${_non_a}${_tput_yellow}${_non_b}${git_branch}${_non_a}${_tput_reset}${_non_b})"
+      echo "(${_tput_yellow}${git_branch}${_tput_reset})"
     fi
   fi
 }
 
-# Show current path with dynamic path depth
-function _current_path(){
-  local max_path_depth=10
-  local max_path_wclen=50
-  local current_path_slash_count=$(pwd | tr -cd '/' | wc -c)
-  if [[ ${current_path_slash_count} -le ${max_path_depth} ]]; then
-    local current_path_raw=$(pwd)
-  else
-    local current_path_raw=$(pwd | rev | cut -d/ -f1-${max_path_depth} | rev)
-  fi
-  if [[ ${current_path_raw} == "$HOME"  ]]; then
-    local current_path="~"
-  else
-    while [[ ${#current_path_raw} -gt ${max_path_wclen} ]]; do
-      local current_path_raw=$(pwd | rev | cut -d/ -f1-${max_path_depth} | rev)
-      if [[ ${max_path_depth} -gt 1 ]]; then
-        local max_path_depth=$((${max_path_depth}-1))
-      else
-        break
-      fi
-    done
-    local current_path=${current_path_raw}
-  fi
-  echo "${_non_a}${_tput_green}${_non_b}${current_path}${_non_a}${_tput_reset}${_non_b}"
-}
-
 # Customized PS1
-export PS1='\u@\H:$(_current_path) $(_git_branch)\$ '
+export PS1='${_tput_red}\u${_tput_reset}@${_tput_yellow}\H${_tput_reset}:${_tput_green}\w${_tput_reset} $(_git_branch)\$ '
