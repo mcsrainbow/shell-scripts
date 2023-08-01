@@ -43,11 +43,9 @@ _tput_reset=${_nvt_open}$(tput sgr0)${_nvt_close}
 
 # Show current git branch with colors in Bash prompt
 function _git_branch(){
-  if [ -d ".git" ]; then
-    local git_branch=$(git branch --show-current 2>/dev/null)
-    if [[ -n ${git_branch} ]]; then
-      echo "(${_tput_yellow}${git_branch}${_tput_reset})"
-    fi
+  local git_branch=$(git branch --show-current 2>/dev/null)
+  if [[ -n ${git_branch} ]]; then
+    echo "(${_tput_yellow}${git_branch}${_tput_reset})"
   fi
 }
 
