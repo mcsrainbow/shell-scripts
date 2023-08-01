@@ -17,8 +17,8 @@ alias wget='wget --no-check-certificate'
 complete -cf sudo
 
 # Log the history commands with time stamps
-export HISTFILESIZE="100000000"
-export HISTSIZE="100000"
+export HISTFILESIZE="1000000000"
+export HISTSIZE="1000000"
 export PROMPT_COMMAND="history -a"
 export HISTTIMEFORMAT="%Y-%m-%d_%H:%M:%S "
 export HISTIGNORE="history*:pwd:ls:ll:la:clear"
