@@ -12,6 +12,7 @@ alias mv='mv -i'
 alias grep='grep --color=auto'
 alias la='ls -A'
 alias wget='wget --no-check-certificate'
+alias watch='watch '
 
 # Enable auto-completion via sudo
 complete -cf sudo
@@ -41,6 +42,32 @@ _tput_white=${_nvt_open}$(tput setaf 7)${_nvt_close}
 _tput_bold=${_nvt_open}$(tput bold)${_nvt_close}
 _tput_reset=${_nvt_open}$(tput sgr0)${_nvt_close}
 
+# Show current path with dynamic path depth
+function _current_path(){
+  local max_path_depth=10
+  local max_path_wclen=38
+  local current_path_slash_count=$(pwd | tr -cd '/' | wc -c)
+  if [[ ${current_path_slash_count} -le ${max_path_depth} ]]; then
+    local current_path_raw=$(pwd)
+  else
+    local current_path_raw=$(pwd | rev | cut -d/ -f1-${max_path_depth} | rev)
+  fi
+  if [[ ${current_path_raw} == "$HOME"  ]]; then
+    local current_path="~"
+  else
+    while [[ ${#current_path_raw} -gt ${max_path_wclen} ]]; do
+      local current_path_raw=$(pwd | rev | cut -d/ -f1-${max_path_depth} | rev)
+      if [[ ${max_path_depth} -gt 1 ]]; then
+        local max_path_depth=$((${max_path_depth}-1))
+      else
+        break
+      fi
+    done
+    local current_path=${current_path_raw}
+  fi
+  echo "${_tput_green}${current_path}${_tput_reset}"
+}
+
 # Show current git branch with colors in Bash prompt
 function _git_branch(){
   local git_branch=$(git branch --show-current 2>/dev/null)
@@ -50,4 +77,4 @@ function _git_branch(){
 }
 
 # Customized PS1
-export PS1='${_tput_red}\u${_tput_reset}@${_tput_yellow}\H${_tput_reset}:${_tput_green}\w${_tput_reset} $(_git_branch)\$ '
+export PS1='${_tput_red}\u${_tput_reset}@${_tput_yellow}\H${_tput_reset}:${_tput_green}$(_current_path)${_tput_reset} $(_git_branch)\$ '
