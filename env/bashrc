@@ -77,4 +77,4 @@ function _git_branch(){
 }
 
 # Customized PS1
-export PS1='${_tput_red}\u${_tput_reset}@${_tput_yellow}\H${_tput_reset}:${_tput_green}$(_current_path)${_tput_reset} $(_git_branch)\$ '
+export PS1='${_tput_red}\u${_tput_reset}@${_tput_yellow}\H${_tput_reset}:$(_current_path) $(_git_branch)\$ '
