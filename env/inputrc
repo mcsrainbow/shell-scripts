@@ -22,8 +22,8 @@ set completion-ignore-case on
 "\e[3~": delete-char
 "\e[2~": quoted-insert
 
-# Mappings for Ctrl-left-arrow and Ctrl-right-arrow
-# for word moving
+# Mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving,
+# Option-left-arrow and Option-right-arrow on macOS
 "\e[1;5C": forward-word
 "\e[1;5D": backward-word
 "\e[5C": forward-word
