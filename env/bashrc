@@ -70,7 +70,7 @@ function publicip(){
 
   local website
   for website in ${website_list[@]}; do
-    echo "${website}: $(curl -s ${website})"
+    echo "${website}: ${_tput_yellow}$(curl -s ${website})${_tput_reset}"
   done
 }
 
